@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import psycopg2
 from psycopg2 import pool
-
+from DB_utils import search_inventory_info
 app = Flask(__name__)
 CORS(app)  # 啟用 CORS
 
@@ -78,6 +78,35 @@ def get_role(e_id):
     except (Exception, psycopg2.DatabaseError) as error:
         print(f"Error while fetching data from PostgreSQL: {error}")
         return jsonify({'error': 'Database query error'}), 500
+
+@app.route('/searchInventoryInfo/<inv_id>', methods=['GET'])
+def search_inventory_info(inv_id):
+    print("Search inventory info")
+    try:
+        conn = connection_pool.getconn()
+        if conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT * FROM inventory AS i JOIN part AS p ON i.p_id = p.p_id WHERE i.inv_id = %s", (inv_id,))
+            row = cursor.fetchone()
+            #row = search_inventory_info(inv_id)
+            if row:
+                # 確保返回的行數據格式化為 JSON 格式
+                columns = [desc[0] for desc in cursor.description]
+                result = {'inventory_info': dict(zip(columns, row))}
+            else:
+                result = {'error': 'Inventory not found'}
+                
+            cursor.close()
+            connection_pool.putconn(conn)
+            print(f"Query result for inv_id {inv_id}: {result}")
+            return jsonify(result)
+        else:
+            return jsonify({'error': 'Database connection error'}), 500
+                
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(f"Error while fetching data from PostgreSQL: {error}")
+        return jsonify({'error': 'Database query error'}), 500
+
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=3000)

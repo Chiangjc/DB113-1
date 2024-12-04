@@ -31,24 +31,29 @@
 
   <div class="search-section">
     <h2>Inventory Lookup</h2>
-    <input type="text" id="item_id" placeholder="Enter Item ID" />
-    <button onclick="fetchInventory()">Lookup Inventory Info</button>
-    <p id="inventory_info">Enter an Item ID to find its inventory information</p>
+    <input type="text" id="inv_id" placeholder="Enter Inventory ID" />
+    <button onclick="fetchInventoryInfo()">Lookup Inventory Info</button>
+    <p id="inventory_info">Enter an Inventory ID to find its information</p>
   </div>
 
   <script>
-    async function fetchInventory() {
-      const item_id = document.getElementById('item_id').value;
-      if (!item_id) {
-        document.getElementById('inventory_info').textContent = 'Please enter a valid Item ID';
+    async function fetchInventoryInfo() {
+      const inv_id = document.getElementById('inv_id').value;
+      if (!inv_id) {
+        document.getElementById('inventory_info').textContent = 'Please enter a valid Inventory ID';
         return;
       }
       try {
-        const response = await fetch(`http://localhost:3000/getInventory/${item_id}`);
+        const response = await fetch(`http://localhost:3000/searchInventoryInfo/${inv_id}`);
         const data = await response.json();
         console.log('Fetch response:', data); // 添加日誌
         if (response.ok) {
-          document.getElementById('inventory_info').textContent = `Item ID: ${data.item_id}, Quantity: ${data.quantity}`;
+          if (data.inventory_info) {
+            const info = data.inventory_info;
+            document.getElementById('inventory_info').textContent = `Inventory ID: ${info.inv_id}, Part ID: ${info.p_id}, Inv Name: ${info.inv_name}, Quantity: ${info.status}`;
+          } else {
+            document.getElementById('inventory_info').textContent = `Error: ${data.error}`;
+          }
         } else {
           document.getElementById('inventory_info').textContent = `Error: ${data.error}`;
         }
