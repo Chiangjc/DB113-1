@@ -57,6 +57,9 @@ def get_super_id(f_id):
         print(f"Error while fetching data from PostgreSQL: {error}")
         return jsonify({'error': 'Database query error'}), 500
 
+
+
+
 @app.route('/getRole/<e_id>', methods=['GET'])
 def get_role(e_id):
     try:
