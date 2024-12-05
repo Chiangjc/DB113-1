@@ -22,10 +22,19 @@
     .search-section {
       margin-top: 20px;
     }
+    .username {
+      margin-bottom: 20px;
+      font-size: 1.2em;
+      color: #333;
+    }
   </style>
 </head>
 <body>
   <h1>Welcome to ID Lookup</h1>
+  
+  <!-- 顯示使用者名稱 -->
+  <div id="username" class="username">Welcome, <span id="user_name"></span>!</div>
+
   <button onclick="location.href='employee.html'">Employee Page</button>
   <button onclick="location.href='factory.html'">Factory Page</button>
 
@@ -37,6 +46,31 @@
   </div>
 
   <script>
+    // 獲取 URL 中的查詢字符串參數
+    function getQueryParams() {
+      const params = {};
+      const queryString = window.location.search.substring(1);
+      const regex = /([^&=]+)=([^&]*)/g;
+      let m;
+      while (m = regex.exec(queryString)) {
+        params[decodeURIComponent(m[1])] = decodeURIComponent(m[2]);
+      }
+      return params;
+    }
+
+    // 顯示使用者名稱
+    function displayUsername() {
+      const params = getQueryParams();
+      const username = params['username'];
+      if (username) {
+        document.getElementById('user_name').textContent = username;
+      } else {
+        document.getElementById('username').textContent = 'Welcome!';
+      }
+    }
+
+    displayUsername();
+
     async function fetchInventoryInfo() {
       const inv_id = document.getElementById('inv_id').value;
       if (!inv_id) {
@@ -50,7 +84,7 @@
         if (response.ok) {
           if (data.inventory_info) {
             const info = data.inventory_info;
-            document.getElementById('inventory_info').textContent = `Inventory ID: ${info.inv_id}, Part ID: ${info.p_id}, Inv Name: ${info.inv_name}, Quantity: ${info.status}`;
+            document.getElementById('inventory_info').textContent = `Inventory ID: ${info.inv_id}, Part ID: ${info.p_id}, Inv Name: ${info.inv_name}, Quantity: ${info.quantity}`;
           } else {
             document.getElementById('inventory_info').textContent = `Error: ${data.error}`;
           }
