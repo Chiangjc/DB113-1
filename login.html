@@ -54,9 +54,9 @@
 
         if (response.ok && data.role) {
           if (data.role === 'admin') {
-            location.href = 'admin.html';
+            location.href = `admin.html?username=${encodeURIComponent(username)}`;
           } else {
-            location.href = 'index.html';
+            location.href = `index.html?username=${encodeURIComponent(username)}`;
           }
         } else {
           document.getElementById('error').textContent = data.error || 'Invalid username or password';
