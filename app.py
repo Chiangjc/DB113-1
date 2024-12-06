@@ -1,11 +1,11 @@
-from flask import Flask, request, jsonify, redirect, url_for, session
+from flask import Flask, request, jsonify, make_response, redirect, url_for, session
 from flask_cors import CORS
 import psycopg2
 from psycopg2 import pool
 from DB_utils import search_inventory_info
 
 app = Flask(__name__)
-CORS(app)  # 啟用 CORS
+CORS(app, supports_credentials=True) # 啟用 CORS
 app.secret_key = 'supersecretkey'  # 用於 session 加密
 
 # 建立連接池
@@ -21,22 +21,33 @@ try:
 except (Exception, psycopg2.DatabaseError) as error:
     print("Error while connecting to PostgreSQL", error)
 
-
-
-@app.route('/login', methods=['POST'])
-def login():
-    data = request.get_json()
-    username = data.get('username')
-    password = data.get('password')
-
-    if authenticate_user(username, password):
-        session['username'] = username
-        return jsonify({"message": "Login successful"}), 200
-    else:
-        return jsonify({"error": "Invalid username or password"}), 401
-
-    username = request.args.get('username', 'Guest')
-    return 
+@app.route('/login/<e_id>', methods=['GET'])
+def login(e_id):
+    try:
+        conn = connection_pool.getconn()
+        if conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT * FROM employee WHERE e_id = %s", (e_id,))
+            row = cursor.fetchone()
+            if row:
+                result = {
+                    'e_id': row[0],
+                    'e_name': row[1],
+                    'password': row[3],
+                    'role': row[5]
+                }
+                response = make_response(jsonify(result))
+                response.set_cookie('username', row[1], path='/')
+                print(f"Set cookie: username={row[1]}")
+                return response, 200
+            else:
+                result = {'error': 'Employee not found'}
+            cursor.close()
+            connection_pool.putconn(conn)
+            return jsonify(result), 404
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(f"Error while fetching data from PostgreSQL: {error}")
+        return jsonify({'error': 'Database query error'}), 500
 
 @app.route('/getMgrId/<e_id>', methods=['GET'])
 def get_mgr_id(e_id):
@@ -52,7 +63,6 @@ def get_mgr_id(e_id):
                 result = {'error': 'Employee not found'}
             cursor.close()
             connection_pool.putconn(conn)
-            print(f"Query result for e_id {e_id}: {row}")
             return jsonify(result)
     except (Exception, psycopg2.DatabaseError) as error:
         print(f"Error while fetching data from PostgreSQL: {error}")
@@ -77,25 +87,6 @@ def get_super_id(f_id):
         print(f"Error while fetching data from PostgreSQL: {error}")
         return jsonify({'error': 'Database query error'}), 500
 
-@app.route('/getRole/<e_id>', methods=['GET'])
-def get_role(e_id):
-    try:
-        conn = connection_pool.getconn()
-        if conn:
-            cursor = conn.cursor()
-            cursor.execute("SELECT role FROM employee WHERE e_id = %s", (e_id,))
-            row = cursor.fetchone()
-            if row:
-                result = {'role': row[0]}
-            else:
-                result = {'error': 'Employee not found'}
-            cursor.close()
-            connection_pool.putconn(conn)
-            return jsonify(result)
-    except (Exception, psycopg2.DatabaseError) as error:
-        print(f"Error while fetching data from PostgreSQL: {error}")
-        return jsonify({'error': 'Database query error'}), 500
-
 @app.route('/searchInventoryInfo/<inv_id>', methods=['GET'])
 def search_inventory_info_route(inv_id):
     print("Search inventory info")
@@ -113,6 +104,9 @@ def search_inventory_info_route(inv_id):
     except (Exception, psycopg2.DatabaseError) as error:
         print(f"Error while fetching data from PostgreSQL: {error}")
         return jsonify({'error': 'Database query error'}), 500
+
+def authenticate_user(username, password): # 這裡是驗證使用者的邏輯，例如查詢資料庫 # 假設驗證成功返回 True，否則返回 False 
+    return True
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=3000)
