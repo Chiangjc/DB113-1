@@ -1,26 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Employee Lookup</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      background-color: #f4f4f4;
-    }
-    #mgr_id, #role {
-      font-size: 1.5em;
-      margin-top: 10px;
-    }
-  </style>
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Page</title>    <!-- 這裡可以改 -->
+    <link rel="stylesheet" href="styles.css">
+    <script src="user.js" defer></script>
+  </head>
+  <body>
+    <div class="user-bar">
+      <span id="user_name">Loading...</span>
+      <a href="index.html">Main Page</a>
+    </div>
+    <!-- Your other content here -->
+  
   <h1>Employee Lookup</h1>
   <div>
     <input type="text" id="e_id_mgr" placeholder="Enter Employee ID for Manager" />

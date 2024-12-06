@@ -48,16 +48,24 @@
       const password = document.getElementById('password').value;
 
       try {
-        const response = await fetch(`http://localhost:3000/getRole/${username}`);
+        const response = await fetch(`http://localhost:3000/login/${username}`, { 
+          method: 'GET', 
+          credentials: 'include' // 攜帶 Cookie
+          });
         const data = await response.json();
         console.log('Login response:', data);  // 添加日誌
 
         if (response.ok && data.role) {
-          if (data.role === 'admin') {
-            location.href = `admin.html?username=${encodeURIComponent(username)}`;
-          } else {
-            location.href = `index.html?username=${encodeURIComponent(username)}`;
+          if(data.password == password){
+            if (data.role === 'admin') {
+                location.href = `admin.html`;
+              } else {
+                location.href = `index.html`;
+            }
+          }else{
+            document.getElementById('error').textContent = data.error || 'Incorrect password';
           }
+          
         } else {
           document.getElementById('error').textContent = data.error || 'Invalid username or password';
         }
