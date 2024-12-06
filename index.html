@@ -28,74 +28,21 @@
       color: #333;
     }
   </style>
+  <link rel="stylesheet" href="styles.css">
+  <script src="user.js" defer></script>
 </head>
 <body>
+  <div class="user-bar">
+    <span id="user_name">Loading...</span>
+    <a href="index.html">Main Page</a>
+  </div>
+  <!-- Your other content here -->
   <h1>Welcome to ID Lookup</h1>
   
   <!-- 顯示使用者名稱 -->
-  <div id="username" class="username">Welcome, <span id="user_name"></span>!</div>
+  <div id="username" class="username">Welcome, <span id="user_name_display"></span>!</div>
 
   <button onclick="location.href='employee.html'">Employee Page</button>
   <button onclick="location.href='factory.html'">Factory Page</button>
-
-  <div class="search-section">
-    <h2>Inventory Lookup</h2>
-    <input type="text" id="inv_id" placeholder="Enter Inventory ID" />
-    <button onclick="fetchInventoryInfo()">Lookup Inventory Info</button>
-    <p id="inventory_info">Enter an Inventory ID to find its information</p>
-  </div>
-
-  <script>
-    // 獲取 URL 中的查詢字符串參數
-    function getQueryParams() {
-      const params = {};
-      const queryString = window.location.search.substring(1);
-      const regex = /([^&=]+)=([^&]*)/g;
-      let m;
-      while (m = regex.exec(queryString)) {
-        params[decodeURIComponent(m[1])] = decodeURIComponent(m[2]);
-      }
-      return params;
-    }
-
-    // 顯示使用者名稱
-    function displayUsername() {
-      const params = getQueryParams();
-      const username = params['username'];
-      if (username) {
-        document.getElementById('user_name').textContent = username;
-      } else {
-        document.getElementById('username').textContent = 'Welcome!';
-      }
-    }
-
-    displayUsername();
-
-    async function fetchInventoryInfo() {
-      const inv_id = document.getElementById('inv_id').value;
-      if (!inv_id) {
-        document.getElementById('inventory_info').textContent = 'Please enter a valid Inventory ID';
-        return;
-      }
-      try {
-        const response = await fetch(`http://localhost:3000/searchInventoryInfo/${inv_id}`);
-        const data = await response.json();
-        console.log('Fetch response:', data); // 添加日誌
-        if (response.ok) {
-          if (data.inventory_info) {
-            const info = data.inventory_info;
-            document.getElementById('inventory_info').textContent = `Inventory ID: ${info.inv_id}, Part ID: ${info.p_id}, Inv Name: ${info.inv_name}, Quantity: ${info.quantity}`;
-          } else {
-            document.getElementById('inventory_info').textContent = `Error: ${data.error}`;
-          }
-        } else {
-          document.getElementById('inventory_info').textContent = `Error: ${data.error}`;
-        }
-      } catch (error) {
-        console.error('Error fetching inventory info:', error);
-        document.getElementById('inventory_info').textContent = 'Error fetching data';
-      }
-    }
-  </script>
 </body>
 </html>
