@@ -105,8 +105,39 @@ def search_inventory_info_route(inv_id):
         print(f"Error while fetching data from PostgreSQL: {error}")
         return jsonify({'error': 'Database query error'}), 500
 
+
+
+@app.route('/searchInventoryInfo/<inv_id>', methods=['GET'])
+def get_inventory_info(inv_id):
+    print("Search inventory info")
+    try:
+        conn = connection_pool.getconn()
+        if conn:
+            cursor = conn.cursor()
+            table = search_inventory_info(inv_id)
+            if table:
+                result = {'inventory_info': table}
+            else:
+                result = {'error': 'Inventory not found'}
+                
+                cursor.close()
+                connection_pool.putconn(conn)
+                print(f"Query result for inv_id {inv_id}: {table}")
+                return jsonify(result)
+        else:
+            return jsonify({'error': 'Database connection error'}), 500
+                
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(f"Error while fetching data from PostgreSQL: {error}")
+        return jsonify({'error': 'Database query error'}), 500
+
+    return
+
+
+
 def authenticate_user(username, password): # 這裡是驗證使用者的邏輯，例如查詢資料庫 # 假設驗證成功返回 True，否則返回 False 
     return True
+
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=3000)
