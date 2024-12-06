@@ -107,9 +107,11 @@ def search_inventory_info(inv_id):
     SELECT *
     FROM inventory AS i
     JOIN part AS p ON i.p_id = p.p_id
+
     WHERE i.inv_id = %s
     """
     cur.execute(query, (inv_id, ))  # 修正變數名稱
+
     return cur.fetchone()
 
 def search_inventory_rate(s_id):
