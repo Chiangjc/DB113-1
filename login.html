@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background-color: #f4f4f4;
+    }
+    .login-form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: white;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .login-form input {
+      margin: 10px 0;
+      padding: 10px;
+      font-size: 1em;
+    }
+    .login-form button {
+      padding: 10px 20px;
+      font-size: 1em;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-form">
+    <h1>Login</h1>
+    <input type="text" id="username" placeholder="Username" required>
+    <input type="password" id="password" placeholder="Password" required>
+    <button onclick="login()">Login</button>
+    <p id="error" style="color: red;"></p>
+  </div>
+
+  <script>
+    async function login() {
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+
+      try {
+        const response = await fetch(`http://localhost:3000/login/${username}`, { 
+          method: 'GET', 
+          credentials: 'include' // 攜帶 Cookie
+          });
+        const data = await response.json();
+        console.log('Login response:', data);  // 添加日誌
+
+        if (response.ok && data.role) {
+          if(data.password == password){
+            if (data.role === 'admin') {
+                location.href = `admin.html`;
+              } else {
+                location.href = `index.html`;
+            }
+          }else{
+            document.getElementById('error').textContent = data.error || 'Incorrect password';
+          }
+          
+        } else {
+          document.getElementById('error').textContent = data.error || 'Invalid username or password';
+        }
+      } catch (error) {
+        console.error('Error during login:', error);
+        document.getElementById('error').textContent = 'An error occurred during login';
+      }
+    }
+  </script>
+</body>
+</html>
