@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Search Inventory Rate</title>
+  <title>Search Item</title>
   <link rel="stylesheet" href="styles.css">
   <script src="user.js" defer></script>
   <style>
@@ -55,12 +55,12 @@
     <span id="user_name">Loading...</span>
     <a id="main_page_link" href="#">Main Page</a>
   </div>
-  <h1>Search Inventory Info</h1>
+  <h1>Search Item</h1>
   <div class="form-container">
-    <input type="text" id="inv_id" placeholder="Enter Inventory ID" />
-    <button onclick="fetchInventoryInfo()">Lookup Inventory Info</button>
-    <p id="inventory_info">Enter an Inventory ID to find its information</p>
-    <pre id="result"></pre>
+    <input type="text" id="parent_inv" placeholder="Enter Parent Inventory Id" />
+    <input type="text" id="child_inv" placeholder="Enter Child Inventory Id" />
+    <button onclick="fetchItem()">Lookup Item</button>
+    <p id="item_details">Enter Parent or Child Inventory to find item details</p>
   </div>
 
   <script>
@@ -78,37 +78,38 @@
       }
     });
 
-    async function fetchInventoryInfo() {
-      const inv_id = document.getElementById('inv_id').value;
-      if (!inv_id) {
-        document.getElementById('inventory_info').textContent = 'Please enter a valid Inventory ID';
+    async function fetchItem() {
+      const p_inv = document.getElementById('parent_inv').value || 'None';
+      const c_inv = document.getElementById('child_inv').value || 'None';
+      if (p_inv === 'None' && c_inv === 'None') {
+        document.getElementById('item_details').textContent = 'Please enter at least one inventory ID';
         return;
       }
       try {
-        console.log('Fetching inventory info for:', inv_id);
-        const response = await fetch(`http://localhost:3000/searchInventory/${inv_id}`, {
-          method: 'GET',
-          credentials: 'include' // Include cookies if necessary
-        });
+        console.log('Fetching item details for:', p_inv, c_inv);
+        const response = await fetch(`http://localhost:3000/searchItem?p_inv=${p_inv}&c_inv=${c_inv}`);
         const data = await response.json();
         console.log('Fetch response:', data);
         if (response.ok) {
-          const info = data;
-          document.getElementById('inventory_info').innerHTML = `
-            Inventory ID: ${info.inv_id}<br>
-            Inventory Name: ${info.inv_name}<br>
-            Status: ${info.status}<br>
-            Part ID: ${info.p_id}<br>
-            Standard: ${info.standard}<br>
-            Factory Id: ${info.f_id}<br>
-            Supplier Id: ${info.s_id}
-          `;
+          if (data && data.length > 0) {
+            const details = data.map(item => `
+              <div>
+                Parent Inventory: ${item.parent_inv}, 
+                Child Inventory: ${item.child_inv}, 
+                Quantity: ${item.quantity},
+                Number: ${item.total_count}
+              </div>
+            `).join('');
+            document.getElementById('item_details').innerHTML = details;
+          } else {
+            document.getElementById('item_details').textContent = 'No items found';
+          }
         } else {
-          document.getElementById('inventory_info').textContent = `Error: ${data.error}`;
+          document.getElementById('item_details').textContent = `Error: ${data.error}`;
         }
       } catch (error) {
-        console.error('Error fetching inventory info:', error);
-        document.getElementById('inventory_info').textContent = 'Error fetching data';
+        console.error('Error fetching item details:', error);
+        document.getElementById('item_details').textContent = 'Error fetching data';
       }
     }
   </script>

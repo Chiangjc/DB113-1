@@ -69,9 +69,12 @@
   </div>
   <h1>Add Rate</h1>
   <div class="form-container">
-    <input type="text" id="score" placeholder="Enter Score" />
-    <input type="text" id="yearAR" placeholder="Enter Year" />
-    <input type="text" id="supplierAR_id" placeholder="Enter Supplier ID" />
+    <input type="text" id="s_id" placeholder="Enter Supplier ID" />
+    <input type="text" id="year" placeholder="Enter Year" />
+    <input type="text" id="on_time" placeholder="Enter On-time Score" />
+    <input type="text" id="quality" placeholder="Enter Quality Score" />
+    <input type="text" id="after_sales_service" placeholder="Enter After-Sales Service Score" />
+    <input type="text" id="final_score" placeholder="Enter Final Score" />
 
     <button onclick="addRate()">Add Rate</button>
     <p id="add_rate_result">Enter details to add a rate</p>
@@ -79,16 +82,19 @@
 
   <script>
     async function addRate() {
-      const score = document.getElementById('score').value;
-      const year = document.getElementById('yearAR').value;
-      const s_id = document.getElementById('supplierAR_id').value;
+      const s_id = document.getElementById('s_id').value;
+      const year = document.getElementById('year').value;
+      const on_time = document.getElementById('on_time').value;
+      const quality = document.getElementById('quality').value;
+      const after_sales_service = document.getElementById('after_sales_service').value;
+      const final_score = document.getElementById('final_score').value;
 
-      if (!score || !year || !s_id) {
+      if (!s_id || !year || !on_time || !quality || !after_sales_service || !final_score) {
         document.getElementById('add_rate_result').textContent = 'Please fill out all fields';
         return;
       }
 
-      const rateData = {score, year, s_id};
+      const rateData = { s_id, year, on_time, quality, after_sales_service, final_score };
 
       try {
         const response = await fetch('http://localhost:3000/addRate', {
