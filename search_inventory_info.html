@@ -98,7 +98,10 @@
             Inventory ID: ${info.inv_id}<br>
             Inventory Name: ${info.inv_name}<br>
             Status: ${info.status}<br>
-            Part ID: ${info.p_id}
+            Part ID: ${info.p_id}<br>
+            Standard: ${info.standard}<br>
+            Factory Id: ${info.f_id}<br>
+            Supplier Id: ${info.s_id}
           `;
         } else {
           document.getElementById('inventory_info').textContent = `Error: ${data.error}`;
