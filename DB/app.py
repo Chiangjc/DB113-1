@@ -21,7 +21,7 @@ try:
                                                          password="123456",
                                                          host="127.0.0.1",
                                                          port="5431",
-                                                         database="final")
+                                                         database="boeing")
     if connection_pool:
         print("Connection pool created successfully")
 except (Exception, psycopg2.DatabaseError) as error:
@@ -596,11 +596,15 @@ def add_inventory_route():
 
 @app.route('/registerEmployee', methods=['POST'])
 def register_employee():
+    if 'user_id' not in session:
+        return jsonify({'error': 'User not logged in'}), 401
+
+    user_id = session['user_id']
     data = request.get_json()
     e_name = data.get('e_name')
     start_date = data.get('start_date')
     password = data.get('password')
-    mgr_id = data.get('mgr_id')
+    mgr_id = user_id
     role = data.get('role')
     try:
         conn = connection_pool.getconn()
