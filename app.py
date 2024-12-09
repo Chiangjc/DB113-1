@@ -9,6 +9,7 @@ from DB_utils import db_register_employee
 from DB_utils import modify_part, modify_supplier, modify_rate, modify_employee
 from DB_utils import search_employee, list_employee, list_rate
 from DB_utils import add_rate, place_order, add_supplier, add_inventory
+from DB_utils import search_item
 
 app = Flask(__name__)
 CORS(app, supports_credentials=True) # Enable CORS with credentials
@@ -474,24 +475,27 @@ def get_rate_list(s_id):
 def add_rate_route():
     if 'user_id' not in session:
         return jsonify({'error': 'User not logged in'}), 401
+
     data = request.get_json()
-    score = data.get('score')
-    year = data.get('year')
     s_id = data.get('s_id')
-    # e_id = data.get('e_id')
+    year = data.get('year')
+    on_time = data.get('on_time')
+    quality = data.get('quality')
+    after = data.get('after_sales_service')
+    final_score = data.get('final_score')
     e_id = session['user_id']
+
     try:
         conn = connection_pool.getconn()
         if conn:
             cursor = conn.cursor()
-            add_rate(cursor, score, year, s_id, e_id)
+            add_rate(cursor, s_id, year, on_time, quality, after, final_score, e_id)
             cursor.close()
             connection_pool.putconn(conn)
-            print(f"Rate added for s_id {s_id}")
+            print(f"Rate added for supplier {s_id}")
             return jsonify({'success': 'Rate added successfully'}), 201
         else:
             return jsonify({'error': 'Database connection error'}), 500
-                
     except (Exception, psycopg2.DatabaseError) as error:
         print(f"Error while adding rate: {error}")
         return jsonify({'error': 'Database query error'}), 500
@@ -620,6 +624,28 @@ def register_employee():
                 
     except (Exception, psycopg2.DatabaseError) as error:
         print(f"Error while registering employee: {error}")
+        return jsonify({'error': 'Database query error'}), 500
+
+@app.route('/searchItem', methods=['GET'])
+def search_item_route():
+    p_inv = request.args.get('p_inv', "None")
+    c_inv = request.args.get('c_inv', "None")
+
+    try:
+        conn = connection_pool.getconn()
+        if conn:
+            cursor = conn.cursor()
+            result = search_item(cursor, p_inv, c_inv)
+            cursor.close()
+            connection_pool.putconn(conn)
+            if result:
+                return jsonify(result), 200
+            else:
+                return jsonify({'error': 'No items found'}), 404
+        else:
+            return jsonify({'error': 'Database connection error'}), 500
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(f"Error while searching items: {error}")
         return jsonify({'error': 'Database query error'}), 500
 
 

@@ -91,7 +91,10 @@
 
     <input type="password" id="passwordRE" placeholder="Enter Password" />
     <input type="text" id="mgr_idRE" placeholder="Enter Manager ID" />
-    <input type="text" id="roleRE" placeholder="Enter Role" />
+    <select id="roleRE"> 
+      <option value="User">User
+      </option> <option value="Admin">Admin</option>
+    </select>
     <button onclick="registerEmployee()">Register Employee</button>
     <p id="registration_result">Enter details to register an employee</p>
   </div>
