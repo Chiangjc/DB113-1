@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Search Inventory Factory</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="user.js" defer></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background-color: #f4f4f4;
+    }
+    h1 {
+      font-size: 2em;
+    }
+    .form-container {
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .form-container input,
+    .form-container button {
+      margin: 10px;
+      padding: 10px;
+      font-size: 1em;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    .form-container button {
+      cursor: pointer;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+    }
+    .form-container button:hover {
+      background-color: #45a049;
+    }
+    .result {
+      margin-top: 20px;
+      font-size: 1em;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <div class="user-bar">
+    <span id="user_name">Loading...</span>
+    <a id="main_page_link" href="#">Main Page</a>
+  </div>
+  <h1>Search Inventory Factory</h1>
+  <div class="form-container">
+    <input type="text" id="f_name" placeholder="Enter Factory Name" />
+    <button onclick="fetchFactory()">Lookup Factory Name</button>
+    <p id="factory_details">Enter a Factory Name to find their Factory info</p>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => { const userRole = sessionStorage.getItem('user_role'); 
+    const mainPageLink = document.getElementById('main_page_link'); 
+    if (userRole === 'admin') { 
+      mainPageLink.href = 'admin.html'; 
+    } 
+    else { 
+      mainPageLink.href = 'user.html'; 
+    } 
+    const userName = sessionStorage.getItem('username'); 
+    if (userName) { 
+      document.getElementById('user_name').textContent = userName; 
+    } });
+    
+    async function fetchFactory() {
+      const f_name = document.getElementById('f_name').value;
+      if (!f_name) {
+        document.getElementById('factory_details').textContent = 'Please enter a valid Factory Name';
+        return;
+      }
+      try {
+        console.log('Fetching factory details for:', f_name);
+        const response = await fetch(`http://localhost:3000/searchFactory/${f_name}`);
+        const data = await response.json();
+        console.log('Fetch response:', data);
+        if (response.ok) {
+          const details = data.factory_details;
+          document.getElementById('factory_details').innerHTML = `
+            Factory ID: ${details.f_id}, 
+            Factory Name: ${details.f_name}, 
+            Country: ${details.f_country}, 
+            Address: ${details.f_address}, 
+            Phone: ${details.f_phone}, 
+            Supervisor ID: ${details.super_id}`;
+        } else {
+          document.getElementById('factory_details').textContent = `Error: ${data.error}`;
+        }
+      } catch (error) {
+        console.error('Error fetching factory details:', error);
+        document.getElementById('factory_details').textContent = 'Error fetching data';
+      }
+    }
+  </script>
+</body>
+</html>
