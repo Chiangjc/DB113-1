@@ -117,11 +117,13 @@
   <script>
     document.addEventListener('DOMContentLoaded', () => { const userRole = sessionStorage.getItem('user_role'); 
     const mainPageLink = document.getElementById('main_page_link'); 
-    if (userRole === 'admin') { 
+    if (userRole === 'Admin') { 
       mainPageLink.href = 'admin.html'; 
+      console.log("roles",userRole);
     } 
     else { 
       mainPageLink.href = 'user.html'; 
+      console.log("role",userRole);
     } 
     const userName = sessionStorage.getItem('username'); 
     if (userName) { 
