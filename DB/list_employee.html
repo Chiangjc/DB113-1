@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>List Employee</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="user.js" defer></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background-color: #f4f4f4;
+    }
+    h1 {
+      font-size: 2em;
+    }
+    .form-container {
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .form-container select,
+    .form-container input,
+    .form-container button {
+      margin: 10px;
+      padding: 10px;
+      font-size: 1em;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    .form-container button {
+      cursor: pointer;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+    }
+    .form-container button:hover {
+      background-color: #45a049;
+    }
+    .form-container .date-container {
+      display: flex;
+      align-items: center;
+    }
+    .result {
+      margin-top: 20px;
+      font-size: 1em;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <div class="user-bar">
+    <span id="user_name">Loading...</span>
+    <a href="user.html">Main Page</a>
+  </div>
+  <h1>List Employees</h1>
+  <div class="form-container">
+    <div class="date-container">
+      <select id="yearLE">
+        <!-- JavaScript will populate this with years -->
+      </select>
+      <select id="monthLE">
+        <option value="01">January</option>
+        <option value="02">February</option>
+        <option value="03">March</option>
+        <option value="04">April</option>
+        <option value="05">May</option>
+        <option value="06">June</option>
+        <option value="07">July</option>
+        <option value="08">August</option>
+        <option value="09">September</option>
+        <option value="10">October</option>
+        <option value="11">November</option>
+        <option value="12">December</option>
+      </select>
+      <select id="dayLE">
+        <!-- JavaScript will populate this with days -->
+      </select>
+    </div>
+    <input type="text" id="mgr_idLE" placeholder="Enter Manager ID" />
+    <button onclick="fetchEmployeeList()">Fetch Employee List</button>
+    <p id="list_employee_result">Enter details to fetch employee list</p>
+  </div>
+
+  <script>
+    // Populate the year dropdown with values
+    const yearSelect = document.getElementById('yearLE');
+    const currentYear = new Date().getFullYear();
+    for (let year = currentYear; year >= currentYear - 100; year--) {
+      const option = document.createElement('option');
+      option.value = year;
+      option.textContent = year;
+      yearSelect.appendChild(option);
+    }
+
+    // Populate the day dropdown with values
+    const daySelect = document.getElementById('dayLE');
+    for (let day = 1; day <= 31; day++) {
+      const option = document.createElement('option');
+      option.value = day.toString().padStart(2, '0');
+      option.textContent = day;
+      daySelect.appendChild(option);
+    }
+
+    async function fetchEmployeeList() {
+      const year = document.getElementById('yearLE').value;
+      const month = document.getElementById('monthLE').value;
+      const day = document.getElementById('dayLE').value || '01';
+      const start_date = `${year}-${month}-${day}`;
+      const mgr_id = document.getElementById('mgr_idLE').value || 'None';
+
+      if (!start_date && !mgr_id) {
+        document.getElementById('list_employee_result').textContent = 'Please enter at least one search parameter';
+        return;
+      }
+
+      try {
+        console.log('Fetching employee list for:', start_date, mgr_id);
+        const response = await fetch(`http://localhost:3000/listEmployee?start_date=${start_date}&mgr_id=${mgr_id}`);
+        const data = await response.json();
+        console.log('Fetch response:', data);
+        if (response.ok) {
+          const list = data.employee_list;
+          let listInfo = list.map(item => `Employee ID: ${item.e_id}, Name: ${item.e_name}, Start Date: ${item.start_date}, Manager ID: ${item.mgr_id}, Role: ${item.role}`).join('<br>');
+          document.getElementById('list_employee_result').innerHTML = listInfo;
+        } else {
+          document.getElementById('list_employee_result').textContent = `Error: ${data.error}`;
+        }
+      } catch (error) {
+        console.error('Error fetching employee list:', error);
+        document.getElementById('list_employee_result').textContent = 'Error fetching data';
+      }
+    }
+  </script>
+</body>
+</html>

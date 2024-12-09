@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Rate</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="user.js" defer></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background-color: #f4f4f4;
+    }
+    h1 {
+      font-size: 2em;
+    }
+    .form-container {
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .form-container input,
+    .form-container select {
+      margin: 10px;
+      padding: 10px;
+      font-size: 1em;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    .form-container select {
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      background-color: white;
+    }
+    .form-container button {
+      padding: 10px 20px;
+      font-size: 1em;
+      cursor: pointer;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+    }
+    .form-container button:hover {
+      background-color: #45a049;
+    }
+    .result {
+      margin-top: 20px;
+      font-size: 1em;
+      color: #333;
+    }
+    label {
+      font-size: 1em;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="user-bar">
+    <span id="user_name">Loading...</span>
+    <a href="admin.html">Main Page</a>
+  </div>
+  <h1>Add Rate</h1>
+  <div class="form-container">
+    <input type="text" id="score" placeholder="Enter Score" />
+    <input type="text" id="yearAR" placeholder="Enter Year" />
+    <input type="text" id="supplierAR_id" placeholder="Enter Supplier ID" />
+
+    <button onclick="addRate()">Add Rate</button>
+    <p id="add_rate_result">Enter details to add a rate</p>
+  </div>
+
+  <script>
+    async function addRate() {
+      const score = document.getElementById('score').value;
+      const year = document.getElementById('yearAR').value;
+      const s_id = document.getElementById('supplierAR_id').value;
+
+      if (!score || !year || !s_id) {
+        document.getElementById('add_rate_result').textContent = 'Please fill out all fields';
+        return;
+      }
+
+      const rateData = { score, year, s_id};
+
+      try {
+        const response = await fetch('http://localhost:3000/addRate', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include', // Include cookies
+          body: JSON.stringify(rateData),
+        });
+
+        const data = await response.json();
+        console.log('Add rate response:', data);
+        if (response.ok) {
+          document.getElementById('add_rate_result').textContent = 'Rate added successfully';
+        } else {
+          document.getElementById('add_rate_result').textContent = `Error: ${data.error}`;
+        }
+      } catch (error) {
+        console.error('Error adding rate:', error);
+        document.getElementById('add_rate_result').textContent = 'Error adding rate';
+      }
+    }
+  </script>
+</body>
+</html>
