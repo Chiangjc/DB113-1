@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modify Rate</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="user.js" defer></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background-color: #f4f4f4;
+    }
+    h1 {
+      font-size: 2em;
+    }
+    .form-container {
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .form-container input,
+    .form-container select {
+      margin: 10px;
+      padding: 10px;
+      font-size: 1em;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    .form-container select {
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      background-color: white;
+    }
+    .form-container button {
+      padding: 10px 20px;
+      font-size: 1em;
+      cursor: pointer;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+    }
+    .form-container button:hover {
+      background-color: #45a049;
+    }
+    .result {
+      margin-top: 20px;
+      font-size: 1em;
+      color: #333;
+    }
+    label {
+      font-size: 1em;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="user-bar">
+    <span id="user_name">Loading...</span>
+    <a href="admin.html">Main Page</a>
+  </div>
+  <h1>Modify Rate</h1>
+  <div class="form-container">
+    <input type="text" id="year" placeholder="Enter Year" />
+    <input type="text" id="supplierR_id" placeholder="Enter Supplier ID" />
+    
+    <label for="rate_item">Choose Column</label>
+    <select id="rate_item">
+      <option value="score">Score</option>
+      <option value="e_id">Manager ID</option>
+    </select>
+
+    <input type="text" id="rate_new_value" placeholder="Enter New Value" />
+    <button onclick="modifyRate()">Modify Rate</button>
+    <p id="modification_rate">Enter details to modify a rate</p>
+  </div>
+
+  <script>
+    async function modifyRate() {
+      const year = document.getElementById('year').value;
+      const s_id = document.getElementById('supplierR_id').value;
+      const item = document.getElementById('rate_item').value;
+      const new_value = document.getElementById('rate_new_value').value;
+
+      console.log('year:', year); 
+      console.log('s_id:', s_id); 
+      console.log('item:', item); 
+      console.log('new value:', new_value); 
+ 
+
+      if (!year || !s_id || !item || !new_value) {
+        document.getElementById('modification_rate').textContent = 'Please fill out all fields';
+        return;
+      }
+
+      const rateData = { year, s_id, item, new_value };
+
+      try {
+        const response = await fetch('http://localhost:3000/modifyRate', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(rateData),
+        });
+
+        const data = await response.json();
+        console.log('Modification response:', data);
+        if (response.ok) {
+          document.getElementById('modification_rate').textContent = `Success: ${data.success}`;
+        } else {
+          document.getElementById('modification_rate').textContent = `Error: ${data.error}`;
+        }
+      } catch (error) {
+        console.error('Error modifying rate:', error);
+        document.getElementById('modification_rate').textContent = 'Error modifying rate';
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>List Order</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="user.js" defer></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background-color: #f4f4f4;
+    }
+    h1 {
+      font-size: 2em;
+    }
+    .form-container {
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .form-container select,
+    .form-container input,
+    .form-container button {
+      margin: 10px;
+      padding: 10px;
+      font-size: 1em;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    .form-container button {
+      cursor: pointer;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+    }
+    .form-container button:hover {
+      background-color: #45a049;
+    }
+    .date-container div {
+      display: flex;
+      align-items: center;
+    }
+    .result {
+      margin-top: 20px;
+      font-size: 1em;
+      color: #333;
+    }
+    label {
+      font-size: 1em;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="user-bar">
+    <span id="user_name">Loading...</span>
+    <a id="main_page_link" href="#">Main Page</a>
+  </div>
+  <h1>List Order</h1>
+  <div class="form-container">
+    <div class="date-container">
+      <div>
+        <label>Order Date:</label>
+        <select id="order_year">
+          <option value="None">None</option>
+        </select>
+        <select id="order_month">
+          <option value="None">None</option>
+          <option value="01">January</option>
+          <option value="02">February</option>
+          <option value="03">March</option>
+          <option value="04">April</option>
+          <option value="05">May</option>
+          <option value="06">June</option>
+          <option value="07">July</option>
+          <option value="08">August</option>
+          <option value="09">September</option>
+          <option value="10">October</option>
+          <option value="11">November</option>
+          <option value="12">December</option>
+        </select>
+        <select id="order_day">
+          <option value="None">None</option>
+        </select>
+      </div>
+      <div>
+        <label>Due Date:</label>
+        <select id="due_year">
+          <option value="None">None</option>
+        </select>
+        <select id="due_month">
+          <option value="None">None</option>
+          <option value="01">January</option>
+          <option value="02">February</option>
+          <option value="03">March</option>
+          <option value="04">April</option>
+          <option value="05">May</option>
+          <option value="06">June</option>
+          <option value="07">July</option>
+          <option value="08">August</option>
+          <option value="09">September</option>
+          <option value="10">October</option>
+          <option value="11">November</option>
+          <option value="12">December</option>
+        </select>
+        <select id="due_day">
+          <option value="None">None</option>
+        </select>
+      </div>
+      <div>
+        <label>Arrive Date:</label>
+        <select id="arrive_year">
+          <option value="None">None</option>
+        </select>
+        <select id="arrive_month">
+          <option value="None">None</option>
+          <option value="01">January</option>
+          <option value="02">February</option>
+          <option value="03">March</option>
+          <option value="04">April</option>
+          <option value="05">May</option>
+          <option value="06">June</option>
+          <option value="07">July</option>
+          <option value="08">August</option>
+          <option value="09">September</option>
+          <option value="10">October</option>
+          <option value="11">November</option>
+          <option value="12">December</option>
+        </select>
+        <select id="arrive_day">
+          <option value="None">None</option>
+        </select>
+      </div>
+    </div>
+    <label for="status">Choose Column</label>
+    <select id="status">
+      <option value="None">None</option>
+      <option value="Not Yet Shipped">Not Yet Shipped</option>
+      <option value="In Transit">In Transit</option>
+      <option value="Delivered">Delivered</option>
+      <option value="Returned">Returned</option>
+      <option value="Deleted">Deleted</option>
+    </select>
+    <button onclick="fetchOrderList()">Lookup Order List</button>
+    <p id="order_list">Enter details to find orders</p>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => { const userRole = sessionStorage.getItem('user_role'); 
+    const mainPageLink = document.getElementById('main_page_link'); 
+    if (userRole === 'admin') { 
+      mainPageLink.href = 'admin.html'; 
+    } 
+    else { 
+      mainPageLink.href = 'user.html'; 
+    } 
+    const userName = sessionStorage.getItem('username'); 
+    if (userName) { 
+      document.getElementById('user_name').textContent = userName; 
+    } });
+
+    // Populate the year dropdowns
+    const currentYear = new Date().getFullYear();
+    const orderYearSelect = document.getElementById('order_year');
+    const dueYearSelect = document.getElementById('due_year');
+    const arriveYearSelect = document.getElementById('arrive_year');
+    for (let year = currentYear; year >= currentYear - 100; year--) {
+      const option = document.createElement('option');
+      option.value = year;
+      option.textContent = year;
+      orderYearSelect.appendChild(option);
+      dueYearSelect.appendChild(option.cloneNode(true));
+      arriveYearSelect.appendChild(option.cloneNode(true));
+    }
+
+    // Populate the day dropdowns
+    const orderDaySelect = document.getElementById('order_day');
+    const dueDaySelect = document.getElementById('due_day');
+    const arriveDaySelect = document.getElementById('arrive_day');
+    for (let day = 1; day <= 31; day++) {
+      const option = document.createElement('option');
+      option.value = day.toString().padStart(2, '0');
+      option.textContent = day;
+      orderDaySelect.appendChild(option);
+      dueDaySelect.appendChild(option.cloneNode(true));
+      arriveDaySelect.appendChild(option.cloneNode(true));
+    }
+
+    async function fetchOrderList() {
+      const orderYear = document.getElementById('order_year').value;
+      const orderMonth = document.getElementById('order_month').value;
+      const orderDay = document.getElementById('order_day').value;
+      const order_date = (orderYear === 'None' || orderMonth === 'None' || orderDay === 'None') ? 'None' : `${orderYear}-${orderMonth}-${orderDay}`;
+
+      const dueYear = document.getElementById('due_year').value;
+      const dueMonth = document.getElementById('due_month').value;
+      const dueDay = document.getElementById('due_day').value;
+      const due_date = (dueYear === 'None' || dueMonth === 'None' || dueDay === 'None') ? 'None' : `${dueYear}-${dueMonth}-${dueDay}`;
+
+      const arriveYear = document.getElementById('arrive_year').value;
+      const arriveMonth = document.getElementById('arrive_month').value;
+      const arriveDay = document.getElementById('arrive_day').value;
+      const arrive_date = (arriveYear === 'None' || arriveMonth === 'None' || arriveDay === 'None') ? 'None' : `${arriveYear}-${arriveMonth}-${arriveDay}`;
+
+      const status = document.getElementById('status').value;
+
+      try {
+        console.log('Fetching order list for:', order_date, due_date, arrive_date, status);
+        const response = await fetch(`http://localhost:3000/listOrder?order_date=${order_date}&due_date=${due_date}&arrive_date=${arrive_date}&status=${status}`);
+        const data = await response.json();
+        console.log('Fetch response:', data);
+        if (response.ok) {
+          const list = data.order_list;
+          let listInfo = list.map(item => `Order ID: ${item.o_id}, Order Date: ${item.order_date}, Due Date: ${item.due_date}, Arrive Date: ${item.arrive_date}, Status: ${item.status}`).join('<br>');
+          document.getElementById('order_list').innerHTML = listInfo;
+        } else {
+          document.getElementById('order_list').textContent = `Error: ${data.error}`;
+        }
+      } catch (error) {
+        console.error('Error fetching order list:', error);
+        document.getElementById('order_list').textContent = 'Error fetching data';
+      }
+    }
+  </script>
+</body>
+</html>

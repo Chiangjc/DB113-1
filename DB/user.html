@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Page</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background-color: #f4f4f4;
+    }
+    h1 {
+      font-size: 2em;
+    }
+    .options {
+      margin-top: 20px;
+    }
+    .options button {
+      display: block;
+      width: 200px;
+      padding: 10px;
+      margin: 10px;
+      font-size: 1em;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="user-bar">
+    <span id="user_name">Loading...</span>
+    <a href="user.html">Main Page</a>
+  </div>
+  <h1>Welcome to User Page</h1>
+  <p>Here you can query supplier, factory, inventory, order and rate.</p>
+  <div class="options">
+    <button onclick="location.href='place_order.html'">Place Order</button>
+    <button onclick="location.href='update_order_status.html'">Update Order Status</button>
+    <button onclick="location.href='search_inventory_info.html'">Search Inventory Info</button>
+    <button onclick="location.href='search_inventory_rate.html'">Search Inventory Rate</button>
+    <button onclick="location.href='search_factory.html'">Search Factory</button>
+    <button onclick="location.href='search_supplier.html'">Search Supplier</button>
+    <button onclick="location.href='search_order.html'">Search Order</button>
+    <button onclick="location.href='list_inventory.html'">List Inventory</button>
+    <button onclick="location.href='list_order.html'">List Order</button>
+    
+    
+  </div>
+</body>
+</html>

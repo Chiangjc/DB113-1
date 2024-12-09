@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>List Inventory</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="user.js" defer></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background-color: #f4f4f4;
+    }
+    h1 {
+      font-size: 2em;
+    }
+    .form-container {
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .form-container input,
+    .form-container button {
+      margin: 10px;
+      padding: 10px;
+      font-size: 1em;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    .form-container button {
+      cursor: pointer;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+    }
+    .form-container button:hover {
+      background-color: #45a049;
+    }
+    .result {
+      margin-top: 20px;
+      font-size: 1em;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <div class="user-bar">
+    <span id="user_name">Loading...</span>
+    <a id="main_page_link" href="#">Main Page</a>
+  </div>
+  <h1>List Inventory</h1>
+  <div class="form-container">
+    <input type="text" id="inv_name" placeholder="Enter Inventory Name" />
+    <button onclick="fetchInventoryList()">Lookup Inventory List</button>
+    <p id="inventory_list">Enter an Inventory Name to find its items</p>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => { const userRole = sessionStorage.getItem('user_role'); 
+    const mainPageLink = document.getElementById('main_page_link'); 
+    if (userRole === 'admin') { 
+      mainPageLink.href = 'admin.html'; 
+    } 
+    else { 
+      mainPageLink.href = 'user.html'; 
+    } 
+    const userName = sessionStorage.getItem('username'); 
+    if (userName) { 
+      document.getElementById('user_name').textContent = userName; 
+    } });
+    
+    async function fetchInventoryList() {
+      const inv_name = document.getElementById('inv_name').value;
+      if (!inv_name) {
+        document.getElementById('inventory_list').textContent = 'Please enter a valid Inventory Name';
+        return;
+      }
+      try {
+        console.log('Fetching inventory list for:', inv_name);
+        const response = await fetch(`http://localhost:3000/listInventory/${inv_name}`);
+        const data = await response.json();
+        console.log('Fetch response:', data);
+        if (response.ok) {
+          const list = data.inventory_list;
+          let listInfo = list.map(item => `Inventory ID: ${item.inv_id}, Inventory Name: ${item.inv_name}, Status: ${item.status}, Part ID: ${item.p_id}`).join('<br>');
+          document.getElementById('inventory_list').innerHTML = listInfo;
+        } else {
+          document.getElementById('inventory_list').textContent = `Error: ${data.error}`;
+        }
+      } catch (error) {
+        console.error('Error fetching inventory list:', error);
+        document.getElementById('inventory_list').textContent = 'Error fetching data';
+      }
+    }
+  </script>
+</body>
+</html>

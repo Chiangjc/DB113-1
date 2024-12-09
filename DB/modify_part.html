@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modify Part</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="user.js" defer></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background-color: #f4f4f4;
+    }
+    h1 {
+      font-size: 2em;
+    }
+    .form-container {
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .form-container input,
+    .form-container select {
+      margin: 10px;
+      padding: 10px;
+      font-size: 1em;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    .form-container select {
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      background-color: white;
+    }
+    .form-container button {
+      padding: 10px 20px;
+      font-size: 1em;
+      cursor: pointer;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+    }
+    .form-container button:hover {
+      background-color: #45a049;
+    }
+    .result {
+      margin-top: 20px;
+      font-size: 1em;
+      color: #333;
+    }
+    label {
+      font-size: 1em;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="user-bar">
+    <span id="user_name">Loading...</span>
+    <a href="admin.html">Main Page</a>
+  </div>
+  <h1>Modify Part</h1>
+  <div class="form-container">
+    <input type="text" id="part_id" placeholder="Enter Part ID" />
+
+    <label for="item">Choose Column</label>
+    <select id="item">
+      <option value="p_name">Name</option>
+      <option value="standard">Standard</option>
+      <option value="length">Length</option>
+      <option value="width">Width</option>
+      <option value="height">Height</option>
+    </select>
+
+    <input type="text" id="new_value" placeholder="Enter New Value" />
+    <button onclick="modifyPart()">Modify Part</button>
+    <p id="modification_part">Enter details to modify a part</p>
+  </div>
+
+  <script>
+    async function modifyPart() {
+      const p_id = document.getElementById('part_id').value;
+      const item = document.getElementById('item').value;
+      const new_value = document.getElementById('new_value').value;
+
+      if (!p_id || !item || !new_value) {
+        document.getElementById('modification_result').textContent = 'Please fill out all fields';
+        return;
+      }
+
+      const partData = { p_id, item, new_value };
+
+      try {
+        const response = await fetch('http://localhost:3000/modifyPart', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(partData),
+        });
+
+        const data = await response.json();
+        console.log('Modification response:', data);
+        if (response.ok) {
+          document.getElementById('modification_part').textContent = `Success: ${data.success}`;
+        } else {
+          document.getElementById('modification_part').textContent = `Error: ${data.error}`;
+        }
+      } catch (error) {
+        console.error('Error modifying part:', error);
+        document.getElementById('modification_part').textContent = 'Error modifying part';
+      }
+    }
+  </script>
+</body>
+</html>
