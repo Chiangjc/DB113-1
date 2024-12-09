@@ -1,5 +1,0 @@
-o_id,order_date,due_date,arrive_date,quantity,status,feedback,e_id,inv_id
-100001,2024-03-20,2024-07-20,2024-07-01,200,Delivered,complete,1234567,101
-100002,2024-04-10,2014-06-10,2024-06-29,50,Delivered,"1 broken;
-late",1234567,102
-100003,2024-10-31,2024-12-31,,300,Not Yet Shipped,,2345678,201

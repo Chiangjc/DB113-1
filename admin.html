@@ -3,7 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Page</title>
+  <title>User Page</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="user.js" defer></script>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -17,10 +19,51 @@
     h1 {
       font-size: 2em;
     }
+    .options {
+      margin-top: 20px;
+    }
+    .options button {
+      display: block;
+      width: 200px;
+      padding: 10px;
+      margin: 10px;
+      font-size: 1em;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
+  <div class="user-bar">
+    <span id="user_name">Loading...</span>
+    <a href="login.html">Main Page</a>
+  </div>
   <h1>Welcome to Admin Page</h1>
+
+  <p>Here you can manage users, view reports, etc.</p>
+  <div class="options">
+    
+    <button onclick="location.href='add_inventory.html'">Add Inventory</button>
+    <button onclick="location.href='add_supplier.html'">Add Supplier</button>
+    <button onclick="location.href='add_rate.html'">Add Rate</button>
+    <button onclick="location.href='modify_employee.html'">Modify Employee</button>
+    <button onclick="location.href='modify_part.html'">Modify Part</button>
+    <button onclick="location.href='modify_supplier.html'">Modify Supplier</button>
+    <button onclick="location.href='modify_rate.html'">Modify Rate</button>
+    <button onclick="location.href='register_employee.html'">Register Employee</button>
+    <button onclick="location.href='list_employee.html'">List Employee</button>
+    <button onclick="location.href='list_rate.html'">List Rate</button>
+    <button onclick="location.href='search_employee.html'">Search Employee</button>
+    <button onclick="location.href='place_order.html'">Place Order</button>
+    <button onclick="location.href='update_order_status.html'">Update Order Status</button>
+    <button onclick="location.href='update_password.html'">Update Password</button>
+    <button onclick="location.href='search_inventory_info.html'">Search Inventory Info</button>
+    <button onclick="location.href='search_inventory_rate.html'">Search Inventory Rate</button>
+    <button onclick="location.href='search_factory.html'">Search Factory</button>
+    <button onclick="location.href='search_supplier.html'">Search Supplier</button>
+    <button onclick="location.href='search_order.html'">Search Order</button>
+    <button onclick="location.href='list_inventory.html'">List Inventory</button>
+    <button onclick="location.href='list_order.html'">List Order</button>
+  </div>
   <div id="username" class="username">Welcome, <span id="user_name"></span>!</div>
   <p>Here you can manage users, view reports, etc.</p>
   <script>

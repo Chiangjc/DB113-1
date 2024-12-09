@@ -1,0 +1,301 @@
+f_id,f_name,f_country,f_address,f_phone,super_id
+1,AeroCore Components A,Canada,"7653 Alan Centers
+East Patrickville, OH 26742",+1 3050431814,MA851523715
+2,AeroCore Components B,Canada,"03428 Jackson Plain Suite 166
+New Barbaramouth, DC 04726",+1 2899615464,KY630706047
+3,AeroCore Components C,Canada,"50716 Richard Drives Apt. 157
+Robinsonside, UT 47719",+1 3464515023,FX590580222
+4,AeroCore Components D,Singapore,"67660 Amy Ridge
+East Michael, RI 76312",+65 4366048021,PL843066960
+5,AeroCore Components E,Australia,"07178 Natasha Loop
+Deborahfurt, MS 63867",+61 7587432361,FR860050662
+6,SkyLift Technologies A,China,"76605 Kevin Road Apt. 073
+Wilsonmouth, MP 18142",+86 9358062246,AW039494345
+7,SkyLift Technologies B,USA,"Unit 4206 Box 0251
+DPO AP 12934",+1 6336277593,KE181528315
+8,SkyLift Technologies C,South Korea,"9146 Amanda Keys Suite 886
+Karenton, WI 76253",+82 5299757428,ZY921252688
+9,SkyLift Technologies D,USA,"44261 Julia Cliffs
+Hernandezport, SC 84410",+1 3839332739,KD353929317
+10,SkyLift Technologies E,United Kingdom,"89319 Lester Gardens Apt. 939
+Rossmouth, MS 95530",+44 4673453799,VV631531230
+11,Stellar Dynamics A,Canada,"1559 Tina Parkways Apt. 198
+Castilloport, NJ 26621",+1 7172658529,SW467340781
+12,Stellar Dynamics B,United Kingdom,"0090 Jill Point
+Crystalview, WV 86395",+44 7616872225,MC728235143
+13,Stellar Dynamics C,Poland,"19750 Briana Forks
+East Amanda, TN 97231",+48 3677340085,GT880007714
+14,Stellar Dynamics D,Brazil,"21385 Johnny Prairie
+Ruizville, AR 55493",+55 6684705826,NX653285193
+15,NovaJet Systems A,United Kingdom,"83171 Anthony Junctions
+South Derekhaven, AZ 31504",+44 4003840709,TQ547380249
+16,NovaJet Systems B,Germany,"3812 Glover Viaduct
+East Carlostown, ND 06803",+49 5733821754,VJ740268321
+17,NovaJet Systems C,United Kingdom,"2884 Kelley Spur
+Douglasmouth, AR 90749",+44 7668068616,UZ223698643
+18,NovaJet Systems D,USA,"2746 Anderson Road Apt. 337
+West Jamie, NE 26967",+1 5055761674,UZ923354270
+19,NovaJet Systems E,Canada,"263 Hammond River Suite 888
+Curryfurt, AR 81706",+1 1957558596,DK379032797
+20,Infinity Assemblies A,Japan,"043 Padilla Course Apt. 311
+New Caroltown, AR 26396",+81 4154237146,ME777405065
+21,Infinity Assemblies B,USA,"8844 Browning Trail Apt. 915
+Milesbury, CT 03805",+1 4810643197,GW104693546
+22,Infinity Assemblies C,USA,"393 Sara Gateway Suite 876
+North Miaberg, FM 11937",+1 5604632843,HZ395162913
+23,Infinity Assemblies D,United Kingdom,"343 Alexa Parks Suite 981
+Port Latasha, UT 27966",+44 0029738372,VW633554991
+24,Infinity Assemblies E,USA,"4454 Hudson Club
+Jasonville, MP 97953",+1 4240823726,FM854289742
+25,FlightCore Manufacturing A,China,"94816 Woodard Trail
+Steveland, SD 24780",+86 6463881378,GU014326992
+26,FlightCore Manufacturing B,United Kingdom,"259 Clarence Ramp
+West Curtis, NV 89087",+44 6147068828,CO859901988
+27,FlightCore Manufacturing C,Canada,"4783 Tracy Green Apt. 048
+East Micheleland, AL 39223",+1 6137965423,HY728305554
+28,FlightCore Manufacturing D,USA,"798 Joseph Extensions
+Lake Diana, UT 08569",+1 6863245783,DL435774256
+29,FlightCore Manufacturing E,USA,"86461 Schmitt Island
+Hunterberg, LA 34898",+1 7691266001,YE254266195
+30,BlueHorizon Industries A,Canada,"7455 Sean Vista
+Wallaceton, AL 68340",+1 7096718820,ET864322096
+31,BlueHorizon Industries B,Poland,"056 Lopez Summit
+New Scottmouth, MT 35067",+48 3459224211,BC047636368
+32,BlueHorizon Industries C,Germany,"71355 Olson Shores
+Madisonburgh, CO 23713",+49 7330698668,PE441128335
+33,Cloudline Assemblies A,France,"393 Mann Bridge Suite 725
+Hollychester, MH 64067",+33 7269284937,VJ432712612
+34,Cloudline Assemblies B,Canada,"05384 Raymond Harbors
+Ramirezborough, SD 55333",+1 7329657838,NL940252439
+35,Cloudline Assemblies C,China,"91321 Patrick Lodge Suite 317
+East Ryanton, GA 22793",+86 8314246524,VQ432447908
+36,Cloudline Assemblies D,Czech Republic,"031 Anne Mission
+Melindaside, NV 24658",+420 3837460520,BK272189839
+37,Cloudline Assemblies E,Australia,"5353 Freeman Valley
+Schwartzshire, OR 08746",+61 5869609450,IS790974119
+38,JetMax Fabrication A,France,"254 Jenny Square
+New Shaun, IA 45451",+33 2591900606,BY583016021
+39,JetMax Fabrication B,Canada,"USNV Dougherty
+FPO AA 89175",+1 6412472539,PV519922527
+40,Altitude AeroParts A,Canada,"6135 Clarke Orchard
+New Cody, AK 10510",+1 5417170913,NV007595501
+41,Altitude AeroParts B,Czech Republic,"626 Sarah Villages
+Lake Andrewbury, LA 00897",+420 0986332696,BO658312628
+42,Altitude AeroParts C,Australia,"940 James Grove Suite 652
+Samanthaville, NJ 95330",+61 7214556757,OE036963460
+43,Altitude AeroParts D,India,"3836 Clarke Centers Suite 394
+New Patrick, NM 40809",+91 7477227277,SK924306380
+44,Horizon Aerospace A,USA,"4498 Hodge Isle
+Williamborough, PA 26468",+1 8953036736,WW773026518
+45,Horizon Aerospace B,USA,"7053 James Forest Apt. 931
+Mirandaview, NJ 56616",+1 1854675392,LD502410496
+46,Horizon Aerospace C,United Kingdom,"246 Todd Rue
+Port Jessica, MH 43375",+44 9205367321,SB098123396
+47,Horizon Aerospace D,United Kingdom,"98052 Eric Mission Apt. 619
+Harveyhaven, OH 18186",+44 7142218926,CD293595859
+48,Horizon Aerospace E,Canada,"7689 Joseph Causeway Apt. 229
+Davidland, MI 55993",+1 1113119514,ZM632676287
+49,Starline Assemblies A,France,"283 Sanders Park Apt. 571
+Port Joseton, CT 88963",+33 7482474590,FL037092651
+50,Starline Assemblies B,Germany,"542 Fischer Fields
+South Heather, IN 77548",+49 7253499579,ZL581902309
+51,Starline Assemblies C,United Kingdom,"8307 Eric Ways Apt. 162
+Krauseshire, WI 63354",+44 0755938221,JJ136991614
+52,Starline Assemblies D,United Kingdom,"24759 Catherine Wells Suite 493
+Ronaldborough, AS 52823",+44 2929629073,DL998096008
+53,Starline Assemblies E,USA,"90528 Brown Circles Suite 255
+Richardfort, HI 73343",+1 7003809960,EY346578993
+54,Stratosphere Systems A,United Kingdom,"31463 Jones Brooks
+Port Brandon, MO 94316",+44 2898177283,UC378056551
+55,Stratosphere Systems B,USA,"066 Callahan Spur
+North Kimberly, MS 28201",+1 6743245063,VP634255492
+56,Stratosphere Systems C,Japan,"06389 Snyder Park
+Nicholasfurt, VI 35859",+81 5892052593,SU178565752
+57,Stratosphere Systems D,Canada,"4741 Justin Knoll
+East Karen, TN 52815",+1 1332829899,CL515517090
+58,TurboWing Assembly A,Singapore,"4428 Gray Ways Apt. 740
+Williamsbury, DC 64742",+65 2785679313,NZ643121596
+59,TurboWing Assembly B,United Kingdom,"214 Johnson Square
+Lake Christophershire, HI 81002",+44 3869836674,ZN563755106
+60,TurboWing Assembly C,Germany,"292 Golden Avenue Suite 433
+East Drewtown, WV 47915",+49 4809349478,GB900759847
+61,TurboWing Assembly D,Czech Republic,"2914 Thomas Plain Suite 705
+East Kevinton, GU 69713",+420 0879498010,MK743278946
+62,TurboWing Assembly E,France,"57768 James Divide Suite 074
+Maryfort, KS 08066",+33 9026713761,KN160057429
+63,GlideTech Manufacturing A,France,"40614 Perry Rapid
+West Mark, WV 36088",+33 0142947687,MM995026373
+64,GlideTech Manufacturing B,United Kingdom,"6836 Daniel Cliffs Suite 675
+Shawnview, PA 37800",+44 8524203104,GU749141535
+65,Apex Avionics A,United Kingdom,"51415 John Heights Suite 352
+Paulaview, HI 13979",+44 3810072893,VX001300658
+66,Apex Avionics B,France,"38154 Miller Camp Suite 974
+Port Jessicaport, WI 56021",+33 2404975795,BO017845609
+67,Apex Avionics C,France,"80195 Dawn Point Apt. 058
+Webbshire, CO 83136",+33 8811060897,PC564681972
+68,Eagle Precision Works A,France,"4436 Jonathan Shore
+Meredithborough, IA 65665",+33 0275513277,FB525755620
+69,Eagle Precision Works B,USA,"36834 Lopez Falls
+West Elizabeth, MH 13527",+1 0008348538,VE834956325
+70,Eagle Precision Works C,Australia,"579 Archer Ports
+Lake Nicholas, NE 64630",+61 8039320583,MG696732800
+71,Eagle Precision Works D,Canada,"541 Heather Tunnel
+East Julietown, IL 10024",+1 1194192351,JA765007047
+72,Eagle Precision Works E,United Kingdom,"677 Curry Harbor
+Stephaniechester, MP 68893",+44 8257855728,GR094988010
+73,FlightPath Engineering A,Germany,"Unit 1733 Box 4439
+DPO AP 86428",+49 1245775693,TH159007139
+74,FlightPath Engineering B,France,"327 Angela Lodge
+West Yolandaport, CT 37070",+33 3019499537,JN393912330
+75,FlightPath Engineering C,USA,"89120 Melissa Pike Apt. 294
+Jackietown, AS 69858",+1 3136911466,JS705612429
+76,Titan AeroParts A,Canada,"06378 Stevens Roads
+Port Sabrinashire, MD 51168",+1 2806344551,PH529298250
+77,Titan AeroParts B,Japan,"729 Austin Orchard Apt. 145
+Markfort, OH 91370",+81 0600525093,GU749141535
+78,JetBridge Systems A,India,"8054 Casey Avenue
+West Johnbury, WV 36492",+91 3805207538,IE749252845
+79,JetBridge Systems B,France,"0149 Adrienne Walk Apt. 431
+West Valerie, TX 20817",+33 7887110042,JP911001911
+80,JetBridge Systems C,Canada,"2336 Stephanie Coves
+Lake Scottbury, PA 23631",+1 2774176783,RY589923208
+81,LunarJet Components A,France,"53181 Hess Trail Apt. 255
+Pattersonfurt, HI 65126",+33 9003032238,EZ135285084
+82,LunarJet Components B,United Kingdom,"796 Smith Camp Suite 678
+Lake Alexandraborough, UT 84748",+44 2388394837,SG078014589
+83,LunarJet Components C,United Kingdom,"102 Mallory Knolls Apt. 116
+Freemanton, KY 21533",+44 6102479155,XN723034461
+84,LunarJet Components D,Canada,"40627 Shari Meadows Apt. 420
+North Maryville, SC 18483",+1 7633833007,QZ808522458
+85,LunarJet Components E,United Kingdom,"60256 Paul Key
+Hugheschester, DE 70107",+44 4652442513,FH429635761
+86,SolarWing Systems A,France,"12336 Jason Mount
+Lake Jeffrey, WA 04102",+33 8655846177,AI163655151
+87,AeroVerge Manufacturing A,United Kingdom,"2182 Robert Spring Suite 878
+Landrybury, ID 79093",+44 5169899917,MA511376196
+88,AeroVerge Manufacturing B,India,"784 Alexis Trace Apt. 505
+Kathyville, FL 74702",+91 5506917833,FE301797549
+89,AeroVerge Manufacturing C,Japan,"943 Marks Shoal Apt. 955
+East Douglas, AZ 12172",+81 7259563617,QI027151428
+90,AeroVerge Manufacturing D,USA,"556 Thompson Springs Suite 279
+Elizabethburgh, DC 24583",+1 0648665076,NC998861495
+91,AeroVerge Manufacturing E,Mexico,"5132 Nelson Divide
+Frybury, DE 26808",+52 8412395762,HE368621167
+92,FalconTech Assembly A,Italy,"88162 Anderson Drives
+Sherryberg, DC 84635",+39 4430197402,DV405247818
+93,FalconTech Assembly B,France,"150 Timothy Green
+Lake Gabriela, ME 01925",+33 6620671507,ZY362821561
+94,FalconTech Assembly C,United Kingdom,"715 Edwards Orchard
+Reginaldfurt, NH 93577",+44 7967545556,OA456007673
+95,FalconTech Assembly D,Malaysia,"60987 Michelle Roads
+Port Candicetown, KY 43451",+60 9881567085,XU133882493
+96,FalconTech Assembly E,USA,"270 Branch Key
+East Angelaton, VA 25810",+1 8293940657,VE182193599
+97,JetCore Solutions A,Japan,"30073 Smith Stream Suite 105
+North Markland, ID 76944",+81 0837282649,WG423498425
+98,JetCore Solutions B,Japan,"02518 Clark Road
+Port Michael, NM 26264",+81 5459859337,GR094988010
+99,JetCore Solutions C,China,"285 Michele Squares Apt. 945
+Williamsview, RI 56378",+86 7850594691,VC664071920
+100,JetCore Solutions D,Singapore,"0275 Hines Way Suite 796
+New Christinatown, AR 65766",+65 0258770115,GI276852493
+101,Skyward Manufacturing A,Japan,"911 Frank Garden Suite 695
+Joshuastad, AS 91801",+81 3275458933,FS187993656
+102,Skyward Manufacturing B,United Kingdom,"75376 Kristen Springs
+East Alexanderborough, RI 18347",+44 6929223655,AJ414695802
+103,StellarCraft Manufacturing A,United Kingdom,"0328 Melanie Drives
+Lake John, MA 30966",+44 8475449876,SF067716751
+104,StellarCraft Manufacturing B,France,"497 Dougherty Orchard Apt. 397
+Davidview, SC 31315",+33 0238818964,ZN608291913
+105,StellarCraft Manufacturing C,France,"542 Gregory Villages Apt. 202
+West Sarahhaven, IA 56132",+33 1782436717,JD030523658
+106,StellarCraft Manufacturing D,USA,"55822 Hall Roads Apt. 707
+Harrisberg, ID 80957",+1 5330882232,MB189616812
+107,StellarCraft Manufacturing E,United Kingdom,"2251 White Rapid
+Hendersonshire, PW 17188",+44 4042145346,SJ827664668
+108,TrueFlight Technologies A,Canada,"Unit 4257 Box 2933
+DPO AA 27237",+1 6511684523,CS535477900
+109,TrueFlight Technologies B,Singapore,"7421 Payne Knoll
+Port Paulmouth, MT 24572",+65 2080292054,RB589483599
+110,Helios Aerospace A,Mexico,"739 Welch Meadow Apt. 310
+Burnsstad, NJ 73820",+52 1167498496,DH412238148
+111,AeroFusion Works A,Germany,"7597 Michael Island
+Calvinland, AZ 87662",+49 4808656631,DW392407639
+112,NovaCraft Systems A,Brazil,"5634 Fitzgerald Cove
+South Rodneybury, KS 81418",+55 1530727654,PN644700406
+113,NovaCraft Systems B,Canada,"809 Smith Forks
+South Leon, FL 02441",+1 6069272278,UM737895349
+114,NovaCraft Systems C,Canada,"84552 Julie Heights Suite 353
+Johnsonhaven, MO 67377",+1 4931138472,UB090272400
+115,NovaCraft Systems D,China,"USNS Cole
+FPO AP 09949",+86 7929390524,CQ675958448
+116,NovaCraft Systems E,China,"9956 Molly View Suite 609
+South Stephen, ME 50163",+86 6768245785,UC900888833
+117,CloudWorks Manufacturing A,Mexico,"2879 Bianca Unions Apt. 001
+North Justinchester, MA 87121",+52 4247814362,TX418289743
+118,CloudWorks Manufacturing B,China,"030 Santos Center Suite 748
+Brandonfurt, IA 96975",+86 9610388187,KU488227353
+119,CloudWorks Manufacturing C,France,"727 Anthony Well Suite 855
+North Brian, LA 55768",+33 4904835108,NZ731827936
+120,CloudWorks Manufacturing D,USA,"12727 Fischer Expressway Suite 688
+Jenkinschester, MA 74323",+1 1497170187,GB900759847
+121,JetFusion Assemblies A,Canada,"512 Traci Valleys
+Mariaburgh, PW 31082",+1 8437533851,NA272259631
+122,JetFusion Assemblies B,Japan,"36848 Garcia Lock Apt. 906
+South Davidbury, WA 73050",+81 6025279273,ZA445448003
+123,JetFusion Assemblies C,United Kingdom,"601 Michelle Prairie
+South Timothymouth, MP 80651",+44 7375295610,AW962240421
+124,Polaris Avionics A,France,"PSC 6374, Box 2446
+APO AA 31817",+33 9174946280,RD197566622
+125,Polaris Avionics B,USA,"12590 White Garden
+Michaelmouth, MD 68997",+1 2718075283,RT396053600
+126,Polaris Avionics C,United Kingdom,"5257 Jeffery Village Suite 395
+New Denisemouth, AS 84916",+44 1513516335,PT295964805
+127,Polaris Avionics D,Germany,"0304 Michael Shore
+Jennifermouth, DE 14827",+49 4394128461,II964822320
+128,Polaris Avionics E,Japan,"862 Mary Heights Apt. 290
+East Aaronview, WY 13952",+81 2243224581,MD556552720
+129,StratosFlight Systems A,France,"07174 Flores Circle Suite 231
+West Manuel, MP 09584",+33 9654923032,DM344393563
+130,StratosFlight Systems B,Poland,"1839 Jennifer Unions Apt. 737
+Robinsonshire, AR 13360",+48 1447901409,HD424321959
+131,StratosFlight Systems C,USA,"Unit 4424 Box 1654
+DPO AA 52952",+1 8804652949,CS393050687
+132,StratosFlight Systems D,USA,"14919 Henry Circle Apt. 502
+New Jamesmouth, AL 61033",+1 5269869846,YJ391780340
+133,StratosFlight Systems E,Canada,"75554 Allison Creek Apt. 116
+Zhangside, KS 58036",+1 6584491173,YS859162271
+134,AeroVantage Systems A,Italy,"7343 Adam Village
+Port Benjaminfort, ND 78061",+39 4043330133,OT688579423
+135,AeroVantage Systems B,Canada,"60149 Stokes Rest Suite 994
+Port Shane, IA 97786",+1 9505025300,MU388755832
+136,AeroVantage Systems C,United Kingdom,"0212 Martin Canyon
+Anthonyshire, DE 39389",+44 2176688590,RI539571118
+137,AeroVantage Systems D,Japan,"USS Wright
+FPO AE 86143",+81 4855625237,MT900670053
+138,AeroVantage Systems E,South Korea,"10831 Smith Gateway
+Mcdanielview, WY 89631",+82 0448668720,GC100792133
+139,Zenith Wingworks A,Germany,"208 Michelle Ranch Apt. 768
+Lake Kelly, LA 52565",+49 2338745841,MQ439767980
+140,Zenith Wingworks B,France,"613 Joshua Corner
+Michelefort, KY 11564",+33 4652606786,JU872089614
+141,Zenith Wingworks C,France,"07056 Jenna Hollow Suite 153
+Blackstad, MN 73329",+33 3383084080,FY119009226
+142,SkyBound Precision A,South Korea,"42862 Jacob Trail Apt. 489
+Parkchester, WI 48540",+82 7952722119,NU803477404
+143,SkyBound Precision B,United Kingdom,"530 Sparks Shore Apt. 186
+East Ashley, WI 33861",+44 9793564646,UX199087122
+144,SkyBound Precision C,United Kingdom,"2362 Martinez Dale
+West Garyview, ME 52017",+44 4141870969,RJ414030307
+145,SkyBound Precision D,United Kingdom,"106 Shea Road Suite 779
+Fisherview, ME 53171",+44 8175177341,AT623368844
+146,SkyBound Precision E,United Kingdom,"1684 Stephen Canyon
+East Abigailview, MO 96151",+44 4903638005,AI163655151
+147,Phoenix JetTech A,USA,"7121 Logan Burgs
+Port Anitaton, SD 35051",+1 9634075024,YB449357204
+148,Phoenix JetTech B,United Kingdom,"82642 Gabriela Freeway
+Anitashire, ND 89074",+44 0627115308,AV460048247
+149,HighPoint Assemblies A,China,"560 Tina Forest
+Henryhaven, OH 40429",+86 5195762525,GS860346003
+150,HighPoint Assemblies B,France,"32478 Gardner Lodge Suite 073
+Port Kristenview, MS 41833",+33 6271460007,SV135276659
