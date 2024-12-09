@@ -53,7 +53,7 @@
 <body>
   <div class="user-bar">
     <span id="user_name">Loading...</span>
-    <a href="user.html">Main Page</a>
+    <a id="main_page_link" href="#">Main Page</a>
   </div>
   <h1>List Rate</h1>
   <div class="form-container">
@@ -63,6 +63,18 @@
   </div>
 
   <script>
+    document.addEventListener('DOMContentLoaded', () => { const userRole = sessionStorage.getItem('user_role'); 
+    const mainPageLink = document.getElementById('main_page_link'); 
+    if (userRole === 'Admin') { 
+      mainPageLink.href = 'admin.html'; 
+    } 
+    else { 
+      mainPageLink.href = 'user.html'; 
+    } 
+    const userName = sessionStorage.getItem('username'); 
+    if (userName) { 
+      document.getElementById('user_name').textContent = userName; 
+    } });
     async function fetchRateList() {
       const s_id = document.getElementById('supplier_rate_id').value;
       if (!s_id) {
@@ -76,7 +88,7 @@
         console.log('Fetch response:', data);
         if (response.ok) {
           const list = data.rate_list;
-          let listInfo = list.map(item => `Score: ${item.score}, Year: ${item.year}, Employee ID: ${item.e_id}`).join('<br>');
+          let listInfo = list.map(item => `Score: ${item.final_score}, Year: ${item.year}, Employee ID: ${item.e_id}`).join('<br>');
           document.getElementById('rate_list').innerHTML = listInfo;
         } else {
           document.getElementById('rate_list').textContent = `Error: ${data.error}`;

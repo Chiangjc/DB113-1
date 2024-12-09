@@ -320,14 +320,13 @@ def modify_supplier(cursor, s_id, item, new_value):
     return cursor.rowcount  # Return the number of rows affected
 
 # V
-def add_rate(cursor, score, year, s_id, e_id):
+def add_rate(cursor, s_id, year, on_time, quality, after, final_score, e_id):
     query = """
-    INSERT INTO rate (s_id ,year, on_time, quality, after_sales_service, final_score, e_id)
-    VALUES (%s, %s,60,60,60, %s, %s)
+    INSERT INTO rate (s_id, year, on_time, quality, after_sales_service, final_score, e_id)
+    VALUES (%s, %s, %s, %s, %s, %s, %s)
     """
-    print(score)
-    cursor.execute(query, (s_id, year, score , e_id))  # Use parameterized query to avoid SQL injection
-    cursor.connection.commit()  # Commit the transaction
+    cursor.execute(query, (s_id, year, on_time, quality, after, final_score, e_id))
+    cursor.connection.commit()
 
 # V
 def modify_rate(cursor, year, s_id, item, new_value):
@@ -399,7 +398,7 @@ def search_employee(cursor, e_id):
 # V
 def list_rate(cursor, s_id):
     query = """
-    SELECT score, year, e_id
+    SELECT final_score, year, e_id
     FROM rate
     WHERE s_id = %s
     """
@@ -410,3 +409,28 @@ def list_rate(cursor, s_id):
         return [dict(zip(column_names, row)) for row in rows]
     return None
 
+def search_item(cursor, p_inv, c_inv):
+    query = """
+    SELECT *, COUNT(*) OVER () AS total_count
+    FROM item
+    WHERE
+    """
+    conditions = []
+    params = []
+
+    if p_inv != "None":
+        conditions.append("parent_inv = %s")
+        params.append(p_inv)
+    if c_inv != "None":
+        conditions.append("child_inv = %s")
+        params.append(c_inv)
+    if not conditions:
+        return "parent_inv and child_inv cannot be both empty."
+
+    query += " AND ".join(conditions) + ";"
+    cursor.execute(query, tuple(params))
+    rows = cursor.fetchall()
+    if rows:
+        column_names = [desc[0] for desc in cursor.description]
+        return [dict(zip(column_names, row)) for row in rows]
+    return None
