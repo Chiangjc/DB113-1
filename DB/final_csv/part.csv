@@ -1,4 +1,0 @@
-p_id,p_name,standard,length,width,height
-1,seat,maximum weight 300kg,0.5,0.5,1.5
-2,window,handle stress 5000N,0.1,0.2,0.4
-3,fabric,soft,3,3,3
