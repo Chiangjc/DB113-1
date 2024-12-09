@@ -18,10 +18,10 @@ app.secret_key = 'supersecretkey'  # Used for session encryption
 try:
     connection_pool = psycopg2.pool.SimpleConnectionPool(1, 20,
                                                          user="postgres",
-                                                         password="123456",
+                                                         password="chiang20161231",
                                                          host="127.0.0.1",
-                                                         port="5431",
-                                                         database="final")
+                                                         port="5432",
+                                                         database="Final")
     if connection_pool:
         print("Connection pool created successfully")
 except (Exception, psycopg2.DatabaseError) as error:
@@ -39,13 +39,13 @@ def login(e_id):
                 result = {
                     'e_id': row[0],
                     'e_name': row[1],
-                    'password': row[3],
-                    'role': row[5]
+                    'password': row[4],
+                    'role': row[6]
                 }
                 response = make_response(jsonify(result))
                 response.set_cookie('username', row[1], path='/')
                 session['user_id'] = row[0]
-                session['role'] = row[5]
+                session['role'] = row[6]
                 print(f"Set cookie: username={row[1]}")
                 return response, 200
             else:
@@ -596,11 +596,15 @@ def add_inventory_route():
 
 @app.route('/registerEmployee', methods=['POST'])
 def register_employee():
+    if 'user_id' not in session:
+        return jsonify({'error': 'User not logged in'}), 401
+
+    user_id = session['user_id']
     data = request.get_json()
     e_name = data.get('e_name')
     start_date = data.get('start_date')
     password = data.get('password')
-    mgr_id = data.get('mgr_id')
+    mgr_id = user_id
     role = data.get('role')
     try:
         conn = connection_pool.getconn()

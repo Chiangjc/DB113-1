@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>User Page</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="user.js" defer></script>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -33,13 +35,14 @@
 <body>
   <div class="user-bar">
     <span id="user_name">Loading...</span>
-    <a href="user.html">Main Page</a>
+    <a href="login.html">Main Page</a>
   </div>
   <h1>Welcome to User Page</h1>
   <p>Here you can query supplier, factory, inventory, order and rate.</p>
   <div class="options">
     <button onclick="location.href='place_order.html'">Place Order</button>
     <button onclick="location.href='update_order_status.html'">Update Order Status</button>
+    <button onclick="location.href='update_password.html'">Update Password</button>
     <button onclick="location.href='search_inventory_info.html'">Search Inventory Info</button>
     <button onclick="location.href='search_inventory_rate.html'">Search Inventory Rate</button>
     <button onclick="location.href='search_factory.html'">Search Factory</button>

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register Employee</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="user.js" defer></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background-color: #f4f4f4;
+    }
+    h1 {
+      font-size: 2em;
+    }
+    .form-container {
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .form-container input,
+    .form-container select {
+      margin: 10px;
+      padding: 10px;
+      font-size: 1em;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    .form-container select {
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      background-color: white;
+    }
+    .form-container button {
+      padding: 10px 20px;
+      font-size: 1em;
+      cursor: pointer;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+    }
+    .form-container button:hover {
+      background-color: #45a049;
+    }
+    .result {
+      margin-top: 20px;
+      font-size: 1em;
+      color: #333;
+    }
+    label {
+      font-size: 1em;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="user-bar">
+    <span id="user_name">Loading...</span>
+    <a href="admin.html">Main Page</a>
+  </div>
+  <h1>Register Employee</h1>
+  <div class="form-container">
+    <input type="text" id="e_nameRE" placeholder="Enter Employee Name" />
+    
+    <label>Start Date:</label>
+    <select id="start_yearRE"></select>
+    <select id="start_monthRE">
+      <option value="01">January</option>
+      <option value="02">February</option>
+      <option value="03">March</option>
+      <option value="04">April</option>
+      <option value="05">May</option>
+      <option value="06">June</option>
+      <option value="07">July</option>
+      <option value="08">August</option>
+      <option value="09">September</option>
+      <option value="10">October</option>
+      <option value="11">November</option>
+      <option value="12">December</option>
+    </select>
+    <select id="start_dayRE"></select>
+
+    <input type="password" id="passwordRE" placeholder="Enter Password" />
+    <input type="text" id="mgr_idRE" placeholder="Enter Manager ID" />
+    <input type="text" id="roleRE" placeholder="Enter Role" />
+    <button onclick="registerEmployee()">Register Employee</button>
+    <p id="registration_result">Enter details to register an employee</p>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Populate year dropdown
+      const startYearSelect = document.getElementById('start_yearRE');
+      const currentYear = new Date().getFullYear();
+      for (let year = currentYear; year >= 1900; year--) {
+        const option = document.createElement('option');
+        option.value = year;
+        option.textContent = year;
+        startYearSelect.appendChild(option);
+      }
+
+      // Populate day dropdown
+      const startDaySelect = document.getElementById('start_dayRE');
+      for (let day = 1; day <= 31; day++) {
+        const option = document.createElement('option');
+        option.value = day < 10 ? `0${day}` : day;
+        option.textContent = day;
+        startDaySelect.appendChild(option);
+      }
+
+      const userRole = sessionStorage.getItem('user_role');
+      const mainPageLink = document.querySelector('.user-bar a');
+
+
+      const userName = sessionStorage.getItem('username');
+      if (userName) {
+        document.getElementById('user_name').textContent = userName;
+      }
+    });
+
+    async function registerEmployee() {
+      const e_name = document.getElementById('e_nameRE').value;
+      const start_date = `${document.getElementById('start_yearRE').value}-${document.getElementById('start_monthRE').value}-${document.getElementById('start_dayRE').value}`;
+      const password = document.getElementById('passwordRE').value;
+      const mgr_id = document.getElementById('mgr_idRE').value;
+      const role = document.getElementById('roleRE').value;
+
+      if (!e_name || !start_date || !password || !mgr_id || !role) {
+        document.getElementById('registration_result').textContent = 'Please fill out all fields';
+        return;
+      }
+
+      const employeeData = { e_name, start_date, password, mgr_id, role };
+
+      try {
+        const response = await fetch('http://localhost:3000/registerEmployee', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include', // Include cookies
+          body: JSON.stringify(employeeData),
+        });
+
+        const data = await response.json();
+        console.log('Registration response:', data);
+        if (response.ok) {
+          document.getElementById('registration_result').textContent = `Employee registered successfully with ID: ${data.e_id}`;
+        } else {
+          document.getElementById('registration_result').textContent = `Error: ${data.error}`;
+        }
+      } catch (error) {
+        console.error('Error registering employee:', error);
+        document.getElementById('registration_result').textContent = 'Error registering employee';
+      }
+    }
+  </script>
+</body>
+</html>

@@ -57,10 +57,12 @@
 
         if (response.ok && data.role) {
           if(data.password == password){
-            if (data.role === 'admin') {
+            sessionStorage.setItem('user_id', data.e_id);
+            sessionStorage.setItem('user_role', data.role);
+            if (data.role === 'Admin') {
                 location.href = `admin.html`;
               } else {
-                location.href = `index.html`;
+                location.href = `user.html`;
             }
           }else{
             document.getElementById('error').textContent = data.error || 'Incorrect password';
