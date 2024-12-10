@@ -455,43 +455,6 @@ def add_relationships(parent_inv_df, child_inv_df, n1, n2, m1, m2):
                 "quantity": random.randint(m1, m2)  # 隨機選擇子零件的數量
             }
             items.append(row)
-# def add_relationships(parent_inv_df, child_inv_df, plane, n1, n2, m1, m2):
-#     # 過濾出符合飛機型號的父零件和子零件
-#     parent_rows = parent_inv_df[parent_inv_df["plane"] == plane]
-#     child_rows = child_inv_df[child_inv_df["plane"] == plane]
-    
-#     # 獲取所有子零件的 inv_id
-#     child_ids = child_rows["inv_id"].tolist()
-    
-#     # 遍歷過濾後的父零件
-#     for _, parent_row in parent_rows.iterrows():
-#         parent_inv_id = parent_row["inv_id"]
-        
-#         # 隨機選擇 num_children 個子零件
-#         selected_children = random.sample(child_ids, min(n1, n2))
-        
-#         # 建立父子關係
-#         for child_inv_id in selected_children:
-#             row = {
-#                 "parent_inv": parent_inv_id,
-#                 "child_inv": child_inv_id,
-#                 "quantity": random.randint(m1, m2)
-#             }
-#             items.append(row)
-            
-def add_final_relationships(plane, child_inv_df):
-    child_rows = child_inv_df[child_inv_df["plane"] == plane]
-    for _, child_row in child_rows.iterrows():
-        child_inv_id = child_row["inv_id"]
-        
-        # 建立父子關係
-        row = {
-            "parent_inv": plane,
-            "child_inv": child_inv_id,
-            "quantity": random.randint(1, 4)
-        }
-        items.append(row)
-    
 
 
 # 找到飛機零件的父子關係
