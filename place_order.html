@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="styles.css">
   <script src="user.js" defer></script>
   <style>
-    body {
+    /*body {
       font-family: Arial, sans-serif;
       display: flex;
       flex-direction: column;
@@ -15,9 +15,31 @@
       justify-content: center;
       height: 100vh;
       background-color: #f4f4f4;
+    }*/
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding-top: 150px; /* 增加頂部間距，避免內容被 header 遮擋 */
+      background-color: #f4f4f4;
     }
     h1 {
       font-size: 2em;
+      text-align: center;
+    }
+    .user-bar {
+      position: fixed; /* 固定在頂部 */
+      top: 0;
+      width: 100%;
+      background-color: #333;
+      color: white;
+      padding: 10px 0;
+      text-align: center;
+      z-index: 1000; /* 確保 header 位於頂層 */
+    }
+    .user-bar a {
+      color: white;
+      margin-left: 20px;
+      text-decoration: none;
     }
     .form-container {
       margin-top: 20px;
@@ -36,13 +58,13 @@
     }
     .form-container button {
       cursor: pointer;
-      background-color: #4CAF50;
+      background-color: #333;
       color: white;
       border: none;
       border-radius: 5px;
     }
     .form-container button:hover {
-      background-color: #45a049;
+      background-color: #575757;
     }
     .form-container .date-container {
       display: flex;
@@ -88,7 +110,7 @@
         <select id="order_dayPO"></select>
       </div>
       <div>
-        <label>Due Date:</label>
+        <label>Due Date:&nbsp;&nbsp;</label>
         <select id="due_yearPO"></select>
         <select id="due_monthPO">
           <option value="01">January</option>
@@ -107,9 +129,9 @@
         <select id="due_dayPO"></select>
       </div>
     </div>
-    <input type="text" id="quantityPO" placeholder="Enter Quantity" />
 
     <input type="text" id="inv_idPO" placeholder="Enter Inventory ID" />
+    <input type="text" id="quantityPO" placeholder="Enter Quantity" />
     <button onclick="placeOrder()">Place Order</button>
     <p id="place_order_result">Enter details to place an order</p>
   </div>

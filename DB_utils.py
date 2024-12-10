@@ -15,7 +15,7 @@ import string
 DB_NAME = "Final"
 DB_USER = "postgres"
 DB_HOST = "localhost"
-DB_PORT = 5432
+DB_PORT = 5433
 
 cur = None
 db = None
@@ -26,7 +26,7 @@ def db_connect():
     exit_code = 0
     try:
         global db
-        db = psycopg2.connect(database=DB_NAME, user=DB_USER, password='chiang20161231', 
+        db = psycopg2.connect(database=DB_NAME, user=DB_USER, password='Coolstand0409', 
                               host=DB_HOST, port=DB_PORT)
         print("Successfully connect to DBMS.")
         global cur
@@ -96,7 +96,14 @@ def update_order_status(cursor, o_id, item, new_value):
     valid_columns = {"status", "feedback", "arrive_date"}
     if item not in valid_columns:
         raise ValueError("Invalid column name.")
-    
+    lock_query = f""" 
+    SELECT o_id 
+    FROM "Order" 
+    WHERE o_id = %s 
+    FOR UPDATE; 
+    """ 
+    cursor.execute(lock_query, (o_id,)) # Lock the row
+
     query = f"""
     UPDATE "Order"
     SET {item} = %s
@@ -105,7 +112,6 @@ def update_order_status(cursor, o_id, item, new_value):
     cursor.execute(query, (new_value, o_id))  # Use parameterized query to avoid SQL injection
     cursor.connection.commit()  # Commit the transaction
     return cursor.rowcount  # Return the number of rows affected
-
 
 # V
 def search_inventory_info(cursor, inv_id):
@@ -172,6 +178,20 @@ def search_supplier(cursor, s_name):
         column_names = [desc[0] for desc in cursor.description]
         return dict(zip(column_names, row))
     return None
+
+def find_history(cursor, inv_id):
+    query = """
+    SELECT *
+    FROM "Order"
+    WHERE inv_id = %s
+    """
+    cursor.execute(query, (inv_id,))  # Use parameterized query to avoid SQL injection
+    results = cursor.fetchall()
+    if results:
+        column_names = [desc[0] for desc in cursor.description]
+        return [dict(zip(column_names, result)) for result in results]  # Return a list of dictionaries
+    else:
+        return None
 
 #V
 def list_inventory(cursor, inv_name):
@@ -434,3 +454,11 @@ def search_item(cursor, p_inv, c_inv):
         column_names = [desc[0] for desc in cursor.description]
         return [dict(zip(column_names, row)) for row in rows]
     return None
+
+def add_item(cursor, parent_inv, child_inv, quantity):
+    query = """
+    INSERT INTO item (parent_inv, child_inv, quantity)
+    VALUES (%s, %s, %s)
+    """
+    cursor.execute(query, (parent_inv, child_inv, quantity))  # Use parameterized query to avoid SQL injection
+    cursor.connection.commit()  # Commit the transaction

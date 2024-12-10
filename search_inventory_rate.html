@@ -35,13 +35,13 @@
     }
     .form-container button {
       cursor: pointer;
-      background-color: #4CAF50;
+      background-color: #333;
       color: white;
       border: none;
       border-radius: 5px;
     }
     .form-container button:hover {
-      background-color: #45a049;
+      background-color: #575757;
     }
     .result {
       margin-top: 20px;
@@ -87,7 +87,7 @@
         const data = await response.json();
         console.log('Fetch response:', data);
         if (response.ok) {
-          const rates = data.rates;
+          const rate = data.rate;
           let ratesInfo = rates.map(rate => `Score: ${rate.score}, Year: ${rate.year}, Employee ID: ${rate.e_id}`).join('<br>');
           document.getElementById('inventory_rate').innerHTML = ratesInfo;
         } else {

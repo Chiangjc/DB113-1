@@ -9,15 +9,29 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
+      margin: 0;
+      padding-top: 150px; /* 增加頂部間距，避免內容被 header 遮擋 */
       background-color: #f4f4f4;
+    }
+    .user-bar {
+      position: fixed; /* 固定在頂部 */
+      top: 0;
+      width: 100%;
+      background-color: #333;
+      color: white;
+      padding: 10px 0;
+      text-align: center;
+      z-index: 1000; /* 確保 header 位於頂層 */
+    }
+    .user-bar a {
+      color: white;
+      margin-left: 20px;
+      text-decoration: none;
     }
     h1 {
       font-size: 2em;
+      text-align: center;
+      margin-top: 20px;
     }
     .form-container {
       margin-top: 20px;
@@ -35,18 +49,13 @@
     }
     .form-container button {
       cursor: pointer;
-      background-color: #4CAF50;
+      background-color: #333;
       color: white;
       border: none;
       border-radius: 5px;
     }
     .form-container button:hover {
-      background-color: #45a049;
-    }
-    .result {
-      margin-top: 20px;
-      font-size: 1em;
-      color: #333;
+      background-color: #575757;
     }
   </style>
 </head>
@@ -65,7 +74,7 @@
   <script>
     document.addEventListener('DOMContentLoaded', () => { const userRole = sessionStorage.getItem('user_role'); 
     const mainPageLink = document.getElementById('main_page_link'); 
-    if (userRole === 'admin') { 
+    if (userRole === 'Admin') { 
       mainPageLink.href = 'admin.html'; 
     } 
     else { 
@@ -90,11 +99,14 @@
         if (response.ok) {
           const details = data.order_details;
           document.getElementById('order_details').innerHTML = `
-            Order ID: ${details.o_id}, 
-            Order Date: ${details.order_date}, 
-            Due Date: ${details.due_date}, 
-            Arrive Date: ${details.arrive_date}, 
-            Status: ${details.status}`;
+           <div class="result">
+            <p>Order ID: ${details.o_id}</p> 
+            <p>Order Date: ${details.order_date}</p> 
+            <p>Due Date: ${details.due_date}</p> 
+            <p>Arrive Date: ${details.arrive_date}</p> 
+            <p>Status: ${details.status}</p>
+            <p>Feedback: ${details.feedback}</p>
+           </div>`;
         } else {
           document.getElementById('order_details').textContent = `Error: ${data.error}`;
         }

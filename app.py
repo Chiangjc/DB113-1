@@ -9,7 +9,8 @@ from DB_utils import db_register_employee
 from DB_utils import modify_part, modify_supplier, modify_rate, modify_employee
 from DB_utils import search_employee, list_employee, list_rate
 from DB_utils import add_rate, place_order, add_supplier, add_inventory
-from DB_utils import search_item
+from DB_utils import search_item, find_history
+from DB_utils import add_item
 
 app = Flask(__name__)
 CORS(app, supports_credentials=True) # Enable CORS with credentials
@@ -19,9 +20,9 @@ app.secret_key = 'supersecretkey'  # Used for session encryption
 try:
     connection_pool = psycopg2.pool.SimpleConnectionPool(1, 20,
                                                          user="postgres",
-                                                         password="chiang20161231",
+                                                         password="Coolstand0409",
                                                          host="127.0.0.1",
-                                                         port="5432",
+                                                         port="5433",
                                                          database="Final")
     if connection_pool:
         print("Connection pool created successfully")
@@ -648,6 +649,56 @@ def search_item_route():
         print(f"Error while searching items: {error}")
         return jsonify({'error': 'Database query error'}), 500
 
+@app.route('/findHistory', methods=['GET'])
+def find_history_route():
+    if 'user_id' not in session:
+        return jsonify({'error': 'User not logged in'}), 401
+
+    inv_id = request.args.get('inv_id')
+    if not inv_id:
+        return jsonify({'error': 'No inventory ID provided'}), 400
+
+    try:
+        conn = connection_pool.getconn()
+        if conn:
+            cursor = conn.cursor()
+            history = find_history(cursor, inv_id)
+            cursor.close()
+            connection_pool.putconn(conn)
+            if history:
+                return jsonify(history), 200
+            else:
+                return jsonify({'error': f'No orders found with inv_id: {inv_id}'}), 404
+        else:
+            return jsonify({'error': 'Database connection error'}), 500
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(f"Error while finding history: {error}")
+        return jsonify({'error': 'Database query error'}), 500
+    
+@app.route('/addItem', methods=['POST'])
+def add_item_route():
+    data = request.get_json()
+    parent_inv = data.get('parent_inv')
+    child_inv = data.get('child_inv')
+    quantity = data.get('quantity')
+
+    if not (parent_inv and child_inv and quantity):
+        return jsonify({'error': 'Missing data: parent_inv, child_inv, and quantity are required'}), 400
+
+    try:
+        conn = connection_pool.getconn()
+        if conn:
+            cursor = conn.cursor()
+            add_item(cursor, parent_inv, child_inv, quantity)
+            cursor.close()
+            connection_pool.putconn(conn)
+            print(f"Item added: parent_inv {parent_inv}, child_inv {child_inv}, quantity {quantity}")
+            return jsonify({'success': 'Item added successfully'}), 201
+        else:
+            return jsonify({'error': 'Database connection error'}), 500
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(f"Error while adding item: {error}")
+        return jsonify({'error': 'Database query error'}), 500
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=3000)

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -9,26 +9,104 @@
   <style>
     body {
       font-family: Arial, sans-serif;
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background-color: #f4f4f4;
+    }
+    
+    .background-container {
+      position: relative; /* 讓絕對定位生效 */
+      background-image: url('boeing1.jpg'); /* 替換成你的圖片路徑 */
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      height: 100%;
+      width: 100%;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      height: 100vh;
-      background-color: #f4f4f4;
+      justify-content: flex-start;
+      padding: 150px 20px 20px 20px; /* 讓上方有空間 */
+      box-sizing: border-box;
     }
+    
+    .background-container::before {
+      content: ''; /* 必須的屬性 */
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(255, 255, 255, 0.6); /* 半透明白色 */
+      z-index: 1; /* 保證這層在背景圖片下 */
+    }
+    
+    /*h1, p {
+      z-index: 2; 
+      text-align: center; 
+    }*/
+    
     h1 {
       font-size: 2em;
+      margin-top: 0;
+      z-index: 2; /* 讓 h1 和 p 在背景圖層的上層 */
+      text-align: center; /* 讓文字置中 */
     }
+    
+    p {
+      font-size: 1.2em;
+      margin-top: 10px;
+      z-index: 2; /* 讓 h1 和 p 在背景圖層的上層 */
+      text-align: center; /* 讓文字置中 */
+    }
+    
     .options {
+      display: flex;
+      flex-direction: row; /* 橫向排列 */
+      justify-content: center; /* 區塊之間等距 */
+      align-items: flex-start; /* 對齊到上方 */
+      gap: 20px; /* 區塊間的間距 */
       margin-top: 20px;
+      flex-wrap: wrap; /* 視窗寬度不足時，自動換行 */
+      z-index: 2; /* 保證選項區塊位於 h1 和 p 下方 */
     }
-    .options button {
-      display: block;
+    
+    .section {
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      background-color: rgba(255, 255, 255, 0.9); /* 半透明白色背景 */
+      flex: 1;
+      max-width: 250px;
+      min-width: 200px;
+      text-align: center;
+      z-index: 2; /* 確保這些按鈕區塊位於 h1 和 p 下方 */
+    }
+    
+    .section h2 {
+      margin: 0 0 10px 0; /* 標題和按鈕間距 */
+      font-size: 1.2em;
+      text-align: center;
+    }
+    
+    .section button {
+      display: inline-block;
       width: 200px;
       padding: 10px;
-      margin: 10px;
+      margin: 5px 0;
       font-size: 1em;
       cursor: pointer;
+      background-color: #333;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
+    }
+    
+    .section button:hover {
+      background-color: #575757;
     }
   </style>
 </head>
@@ -42,28 +120,55 @@
   <p>Here you can manage users, view reports, etc.</p>
   <div class="options">
     
-    <button onclick="location.href='add_inventory.html'">Add Inventory</button>
-    <button onclick="location.href='add_supplier.html'">Add Supplier</button>
-    <button onclick="location.href='add_rate.html'">Add Rate</button>
-    <button onclick="location.href='modify_employee.html'">Modify Employee</button>
-    <button onclick="location.href='modify_part.html'">Modify Part</button>
-    <button onclick="location.href='modify_supplier.html'">Modify Supplier</button>
-    <button onclick="location.href='modify_rate.html'">Modify Rate</button>
-    <button onclick="location.href='register_employee.html'">Register Employee</button>
-    <button onclick="location.href='list_employee.html'">List Employee</button>
-    <button onclick="location.href='list_rate.html'">List Rate</button>
-    <button onclick="location.href='search_employee.html'">Search Employee</button>
-    <button onclick="location.href='place_order.html'">Place Order</button>
-    <button onclick="location.href='update_order_status.html'">Update Order Status</button>
-    <button onclick="location.href='update_password.html'">Update Password</button>
-    <button onclick="location.href='search_inventory_info.html'">Search Inventory Info</button>
-    <!-- <button onclick="location.href='search_inventory_rate.html'">Search Inventory Rate</button> -->
-    <button onclick="location.href='search_factory.html'">Search Factory</button>
-    <button onclick="location.href='search_supplier.html'">Search Supplier</button>
-    <button onclick="location.href='search_order.html'">Search Order</button>
-    <button onclick="location.href='search_item.html'">Search Item</button>
-    <button onclick="location.href='list_inventory.html'">List Inventory Info</button>
-    <button onclick="location.href='list_order.html'">List Order</button>
+    <div class="section">
+      <h2>Place Order</h2>
+      <button onclick="location.href='place_order.html'">Place Order</button>
+    </div>
+  
+    <div class="section">
+      <h2>Update</h2>
+      <button onclick="location.href='update_order_status.html'">Update Order Status</button>
+      <button onclick="location.href='update_password.html'">Update Password</button>
+    </div>
+  
+    <div class="section">
+      <h2>Search</h2>
+      <button onclick="location.href='search_inventory_info.html'">Search Inventory Info</button>
+      <button onclick="location.href='search_employee.html'">Search Employee</button>
+      <button onclick="location.href='search_factory.html'">Search Factory</button>
+      <button onclick="location.href='search_supplier.html'">Search Supplier</button>
+      <button onclick="location.href='search_order.html'">Search Order</button>
+      <button onclick="location.href='search_item.html'">Search Item</button>
+    </div>
+  
+    <div class="section">
+      <h2>List</h2>
+      <button onclick="location.href='list_employee.html'">List Employee</button>
+      <button onclick="location.href='list_rate.html'">List Rate</button>
+      <button onclick="location.href='list_inventory.html'">List Inventory Info</button>
+      <button onclick="location.href='list_order.html'">List Order</button>
+    </div>
+
+    <div class="section">
+      <h2>Add</h2>
+      <button onclick="location.href='add_inventory.html'">Add Inventory</button>
+      <button onclick="location.href='add_supplier.html'">Add Supplier</button>
+      <button onclick="location.href='add_rate.html'">Add Rate</button>
+    </div>
+
+    <div class="section">
+      <h2>Modify</h2>
+      <button onclick="location.href='modify_employee.html'">Modify Employee</button>
+      <button onclick="location.href='modify_part.html'">Modify Part</button>
+      <button onclick="location.href='modify_supplier.html'">Modify Supplier</button>
+      <button onclick="location.href='modify_rate.html'">Modify Rate</button>
+    </div>
+
+    <div class="section">
+      <h2>Register</h2>
+      <button onclick="location.href='register_employee.html'">Register Employee</button>
+    </div>
+    
   </div>
   <div id="username" class="username">Welcome, <span id="user_name"></span>!</div>
   <p>Here you can manage users, view reports, etc.</p>
@@ -93,4 +198,249 @@
     displayUsername();
   </script>
 </body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Page</title>
+  <link rel="stylesheet" href="front-page.css">
+  <script src="user.js" defer></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background-color: #f4f4f4;
+    }
+    
+    .background-container {
+      position: relative; /* 讓絕對定位生效 */
+      background-image: url('boeing1.jpg'); /* 替換成你的圖片路徑 */
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed; /* 背景固定 */
+      height: 150%; /* 減去固定的 user-bar 高度 */
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 20px 20px 20px 20px; /* 讓上方有空間 */
+      box-sizing: border-box;
+      background-color: transparent;
+    }
+
+    .background-container::before {
+      content: ''; /* 必須的屬性 */
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(255, 255, 255, 0.6); /* 半透明白色 */
+      z-index: 1; /* 保證這層在背景圖片下 */
+    }
+
+    h1 {
+      font-size: 2em;
+      margin-top: 100px;
+      z-index: 2; /* 讓 h1 和 p 在背景圖層的上層 */
+      text-align: center; /* 讓文字置中 */
+    }
+    
+    p {
+      font-size: 1.2em;
+      margin-top: 10px;
+      z-index: 2; /* 讓 h1 和 p 在背景圖層的上層 */
+      text-align: center; /* 讓文字置中 */
+    }
+    
+    .options {
+      display: flex;
+      flex-direction: column; /* 垂直排列 */
+      align-items: center;
+      margin-top: 20px;
+      z-index: 2; /* 保證選項區塊位於 h1 和 p 下方 */
+    }
+    
+    .row {
+      display: flex;
+      justify-content: center; /* 區塊之間等距 */
+      gap: 20px; /* 區塊間的間距 */
+      margin-top: 20px;
+    }
+
+    .section {
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      background-color: rgba(255, 255, 255, 0.9); /* 半透明白色背景 */
+      flex: 1;
+      max-width: 250px;
+      min-width: 200px;
+      text-align: center;
+      z-index: 2; /* 確保這些按鈕區塊位於 h1 和 p 下方 */
+    }
+    
+    .section h2 {
+      margin: 0 0 10px 0; /* 標題和按鈕間距 */
+      font-size: 1.2em;
+      text-align: center;
+    }
+    
+    .section button {
+      display: inline-block;
+      width: 200px;
+      padding: 10px;
+      margin: 5px 0;
+      font-size: 1em;
+      cursor: pointer;
+      background-color: #333;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
+    }
+    
+    .section button:hover {
+      background-color: #575757;
+    }
+
+    #user_name {
+      font-size: 1.2em;
+      margin-right: 10px;
+    }
+    
+    .username {
+      font-size: 1.2em;
+      padding-top: 20px; /* 避免文字擠到背景圖片上 */
+    }
+
+    .user-bar {
+      position: fixed; /* 固定在頂部 */
+      top: 0;
+      width: 100%;
+      background-color: #333;
+      color: white;
+      padding: 10px 0;
+      text-align: center;
+      z-index: 1000; /* 確保 header 位於頂層 */
+    }
+    .user-bar a {
+      color: white;
+      margin-left: 20px;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="user-bar">
+    <span id="user_name">Loading...</span>
+    <a href="login.html">Main Page</a>
+  </div>
+  <div class="background-container">
+  <h1>Welcome to Admin Page</h1>
+  <p>Here you can manage users, view reports, etc.</p>
+    <div class="options">
+      <!-- First Row -->
+      <div class="row">
+        <div class="section">
+          <h2>Add</h2>
+          <button onclick="location.href='place_order.html'">Add Order</button>
+          <button onclick="location.href='add_inventory.html'">Add Inventory</button>
+          <button onclick="location.href='add_supplier.html'">Add Supplier</button>
+          <button onclick="location.href='add_rate.html'">Add Rate</button>
+          <button onclick="location.href='add_item.html'">Add Relation</button>
+        </div>
+        <div class="section">
+          <h2>Modify</h2>
+          <button onclick="location.href='update_order_status.html'">Modify Order Status</button>
+          <button onclick="location.href='update_password.html'">Modify Password</button>
+          <button onclick="location.href='modify_employee.html'">Modify Employee</button>
+          <button onclick="location.href='modify_part.html'">Modify Part</button>
+          <button onclick="location.href='modify_supplier.html'">Modify Supplier</button>
+          <button onclick="location.href='modify_rate.html'">Modify Rate</button>
+        </div>
+        <div class="section">
+          <h2>Search</h2>
+          <button onclick="location.href='search_inventory_info.html'">Search Inventory Info</button>
+          <button onclick="location.href='search_employee.html'">Search Employee</button>
+          <button onclick="location.href='search_factory.html'">Search Factory</button>
+          <button onclick="location.href='search_supplier.html'">Search Supplier</button>
+          <button onclick="location.href='search_order.html'">Search Order</button>
+          <button onclick="location.href='search_item.html'">Search Relation</button>
+          <button onclick="location.href='search_history.html'">Search History Order</button>
+        </div>
+        <div class="section">
+          <h2>List</h2>
+          <button onclick="location.href='list_employee.html'">List Employee</button>
+          <button onclick="location.href='list_rate.html'">List Rate</button>
+          <button onclick="location.href='list_inventory.html'">List Inventory Info</button>
+          <button onclick="location.href='list_order.html'">List Order</button>
+        </div>
+        <div class="section">
+          <h2>Register</h2>
+          <button onclick="location.href='register_employee.html'">Register Employee</button>
+        </div>
+      </div>
+
+      <!-- Second Row
+      <div class="row">
+        <div class="section">
+          <h2>Add</h2>
+          <button onclick="location.href='add_inventory.html'">Add Inventory</button>
+          <button onclick="location.href='add_supplier.html'">Add Supplier</button>
+          <button onclick="location.href='add_rate.html'">Add Rate</button>
+          <button onclick="location.href='add_item.html'">Add Relation</button>
+        </div>
+        <div class="section">
+          <h2>Modify</h2>
+          <button onclick="location.href='place_order.html'">Place Order</button>
+          <button onclick="location.href='modify_employee.html'">Modify Employee</button>
+          <button onclick="location.href='modify_part.html'">Modify Part</button>
+          <button onclick="location.href='modify_supplier.html'">Modify Supplier</button>
+          <button onclick="location.href='modify_rate.html'">Modify Rate</button>
+        </div>
+        <div class="section">
+          <h2>Register</h2>
+          <button onclick="location.href='register_employee.html'">Register Employee</button>
+        </div>
+      </div> -->
+    </div>
+  <!-- <div id="username" class="username">Welcome, <span id="user_name"></span>!</div>
+  <p>Here you can manage users, view reports, etc.</p> -->
+  </div>
+  <script>
+    function getQueryParams() {
+      const params = {};
+      const queryString = window.location.search.substring(1);
+      const regex = /([^&=]+)=([^&]*)/g;
+      let m;
+      while (m = regex.exec(queryString)) {
+        params[decodeURIComponent(m[1])] = decodeURIComponent(m[2]);
+      }
+      return params;
+    }
+
+    // 顯示使用者名稱
+    function displayUsername() {
+      const params = getQueryParams();
+      const username = params['username'];
+      if (username) {
+        document.getElementById('user_name').textContent = username;
+      } else {
+        document.getElementById('username').textContent = 'Welcome!';
+      }
+    }
+
+    displayUsername();
+  </script>
+</body>
 </html>
+

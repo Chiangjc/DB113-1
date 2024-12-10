@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Search Inventory Rate</title>
+  <title>Find Order History</title>
   <link rel="stylesheet" href="styles.css">
   <script src="user.js" defer></script>
   <style>
@@ -57,6 +57,28 @@
     .form-container button:hover {
       background-color: #575757;
     }
+    .result-container {
+      margin-top: 20px;
+      width: 80%;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px; /* 增加間距 */
+      justify-content: center; /* 中心對齊 */
+    }
+    .result {
+      flex: 1 1 calc(33.33% - 20px); /* 調整區塊寬度，確保每行三個 */
+      box-sizing: border-box;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      background-color: #fff;
+      box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    .result p {
+      margin: 5px 0;
+      word-wrap: break-word;
+      white-space: normal;
+    }
   </style>
 </head>
 <body>
@@ -64,12 +86,13 @@
     <span id="user_name">Loading...</span>
     <a id="main_page_link" href="#">Main Page</a>
   </div>
-  <h1>Search Inventory Info</h1>
+  <h1>Search Order History</h1>
   <div class="form-container">
     <input type="text" id="inv_id" placeholder="Enter Inventory ID" />
-    <button onclick="fetchInventoryInfo()">Lookup Inventory Info</button>
-    <p id="inventory_info">Enter an Inventory ID to find its information</p>
-    <pre id="result"></pre>
+    <button onclick="findHistory()">Search History</button>
+    <div id="history_details" class="result-container">
+      <p>Enter an Inventory ID to find order history</p>
+    </div>
   </div>
 
   <script>
@@ -87,39 +110,44 @@
       }
     });
 
-    async function fetchInventoryInfo() {
+    async function findHistory() {
       const inv_id = document.getElementById('inv_id').value;
       if (!inv_id) {
-        document.getElementById('inventory_info').textContent = 'Please enter a valid Inventory ID';
+        document.getElementById('history_details').textContent = 'Please enter a valid Inventory ID';
         return;
       }
+
       try {
-        console.log('Fetching inventory info for:', inv_id);
-        const response = await fetch(`http://localhost:3000/searchInventory/${inv_id}`, {
+        console.log('Fetching history for:', inv_id);
+        const response = await fetch(`http://localhost:3000/findHistory?inv_id=${inv_id}`, {
           method: 'GET',
-          credentials: 'include' // Include cookies if necessary
+          credentials: 'include',
         });
+
         const data = await response.json();
         console.log('Fetch response:', data);
         if (response.ok) {
-          const info = data;
-          document.getElementById('inventory_info').innerHTML = `
-          <div class="result">
-            <p>Inventory ID: ${info.inv_id}</p>
-            <p>Inventory Name: ${info.inv_name}</p>
-            <p>Status: ${info.status}</p>
-            <p>Part ID: ${info.p_id}</p>
-            <p>Standard: ${info.standard}</p>
-            <p>Factory Id: ${info.f_id}</p>
-            <p>Supplier Id: ${info.s_id}</p>
-          </div>
-          `;
+          if (data.length > 0) {
+            const details = data.map(order => `
+              <div class="result">
+                <p>Order ID: ${order.o_id}</p>
+                <p>Order Date: ${order.order_date}</p>
+                <p>Due Date: ${order.due_date}</p>
+                <p>Arrive Date: ${order.arrive_date}</p>
+                <p>Quantity: ${order.quantity}</p>
+                <p>Status: ${order.status}</p>
+              </div>
+            `).join('');
+            document.getElementById('history_details').innerHTML = details;
+          } else {
+            document.getElementById('history_details').textContent = 'No orders found';
+          }
         } else {
-          document.getElementById('inventory_info').textContent = `Error: ${data.error}`;
+          document.getElementById('history_details').textContent = `Error: ${data.error}`;
         }
       } catch (error) {
-        console.error('Error fetching inventory info:', error);
-        document.getElementById('inventory_info').textContent = 'Error fetching data';
+        console.error('Error fetching history:', error);
+        document.getElementById('history_details').textContent = 'Error fetching data';
       }
     }
   </script>
