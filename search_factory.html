@@ -9,15 +9,29 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
+      margin: 0;
+      padding-top: 150px; /* 增加頂部間距，避免內容被 header 遮擋 */
       background-color: #f4f4f4;
+    }
+    .user-bar {
+      position: fixed; /* 固定在頂部 */
+      top: 0;
+      width: 100%;
+      background-color: #333;
+      color: white;
+      padding: 10px 0;
+      text-align: center;
+      z-index: 1000; /* 確保 header 位於頂層 */
+    }
+    .user-bar a {
+      color: white;
+      margin-left: 20px;
+      text-decoration: none;
     }
     h1 {
       font-size: 2em;
+      text-align: center;
+      margin-top: 20px;
     }
     .form-container {
       margin-top: 20px;
@@ -35,18 +49,13 @@
     }
     .form-container button {
       cursor: pointer;
-      background-color: #4CAF50;
+      background-color: #333;
       color: white;
       border: none;
       border-radius: 5px;
     }
     .form-container button:hover {
-      background-color: #45a049;
-    }
-    .result {
-      margin-top: 20px;
-      font-size: 1em;
-      color: #333;
+      background-color: #575757;
     }
   </style>
 </head>
@@ -55,7 +64,7 @@
     <span id="user_name">Loading...</span>
     <a id="main_page_link" href="#">Main Page</a>
   </div>
-  <h1>Search Inventory Factory</h1>
+  <h1>Search Factory</h1>
   <div class="form-container">
     <input type="text" id="f_name" placeholder="Enter Factory Name" />
     <button onclick="fetchFactory()">Lookup Factory Name</button>
@@ -90,12 +99,15 @@
         if (response.ok) {
           const details = data.factory_details;
           document.getElementById('factory_details').innerHTML = `
-            Factory ID: ${details.f_id}, 
-            Factory Name: ${details.f_name}, 
-            Country: ${details.f_country}, 
-            Address: ${details.f_address}, 
-            Phone: ${details.f_phone}, 
-            Supervisor ID: ${details.super_id}`;
+            <div class="result">
+                <p>Factory ID: ${details.f_id}</p>
+                <p>Factory Name: ${details.f_name}</p>
+                <p>Country: ${details.f_country}</p>
+                <p>Address: ${details.f_address}</p>
+                <p>Phone: ${details.f_phone}</p>
+                <p>Supervisor ID: ${details.super_id}</p>
+            </div>
+            `;
         } else {
           document.getElementById('factory_details').textContent = `Error: ${data.error}`;
         }

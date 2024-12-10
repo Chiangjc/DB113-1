@@ -45,7 +45,7 @@
     <button onclick="location.href='update_order_status.html'">Update Order Status</button>
     <button onclick="location.href='update_password.html'">Update Password</button>
     <button onclick="location.href='search_inventory_info.html'">Search Inventory Info</button>
-    <button onclick="location.href='list_rate.html'">List Rate</button>
+    <button onclick="location.href='search_inventory_rate.html'">Search Inventory Rate</button>
     <button onclick="location.href='search_factory.html'">Search Factory</button>
     <button onclick="location.href='search_supplier.html'">Search Supplier</button>
     <button onclick="location.href='search_order.html'">Search Order</button>
@@ -62,7 +62,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>User Page</title>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="front-page.css">
   <script src="user.js" defer></script>
   <style>
     body {
@@ -86,7 +86,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: flex-start;
-      padding: 150px;
+      padding: 150px 20px 20px 20px; /* 讓上方有空間 */
       box-sizing: border-box;
     }
     
@@ -97,9 +97,28 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background-color: rgba(255, 255, 255, 0.4); /* 半透明白色 */
+      background-color: rgba(255, 255, 255, 0.6); /* 半透明白色 */
       z-index: 1; /* 保證這層在背景圖片下 */
-    }    
+    }
+    
+    /*h1, p {
+      z-index: 2; 
+      text-align: center; 
+    }*/
+    
+    h1 {
+      font-size: 2em;
+      margin-top: 0;
+      z-index: 2; /* 讓 h1 和 p 在背景圖層的上層 */
+      text-align: center; /* 讓文字置中 */
+    }
+    
+    p {
+      font-size: 1.2em;
+      margin-top: 10px;
+      z-index: 2; /* 讓 h1 和 p 在背景圖層的上層 */
+      text-align: center; /* 讓文字置中 */
+    }
     
     .options {
       display: flex;
@@ -109,7 +128,7 @@
       gap: 20px; /* 區塊間的間距 */
       margin-top: 20px;
       flex-wrap: wrap; /* 視窗寬度不足時，自動換行 */
-      z-index: 2; 
+      z-index: 2; /* 保證選項區塊位於 h1 和 p 下方 */
     }
     
     .section {
@@ -121,18 +140,18 @@
       max-width: 250px;
       min-width: 200px;
       text-align: center;
-      z-index: 2;
+      z-index: 2; /* 確保這些按鈕區塊位於 h1 和 p 下方 */
     }
+    
     .section h2 {
       margin: 0 0 10px 0; /* 標題和按鈕間距 */
       font-size: 1.2em;
-      text-align: center; /* 標題置中 */
-      z-index: 2; 
+      text-align: center;
     }
     
     .section button {
-      display: inline-block; /* 調整按鈕為 inline-block */
-      width: 200px; /* 讓按鈕根據內容調整寬度 */
+      display: inline-block;
+      width: 200px;
       padding: 10px;
       margin: 5px 0;
       font-size: 1em;
@@ -142,40 +161,52 @@
       border: none;
       border-radius: 5px;
       transition: background-color 0.3s ease;
-      z-index: 2; 
     }
     
     .section button:hover {
       background-color: #575757;
     }
-
-    .h1, p{
-      z-index: 2;
+    .user-bar {
+      position: fixed; /* 固定在頂部 */
+      top: 0;
+      width: 100%;
+      background-color: #333;
+      color: white;
+      padding: 10px 0;
+      text-align: center;
+      z-index: 1000; /* 確保 header 位於頂層 */
     }
-
+    .user-bar a {
+      color: white;
+      margin-left: 20px;
+      text-decoration: none;
+    }
   </style>
 </head>
 <body>
-  <div class="background-container">
+  
   <div class="user-bar">
     <span id="user_name">Loading...</span>
     <a href="login.html">Main Page</a>
   </div>
+  <div class="background-container">
+  <!-- <div class="section-top"> -->
   <h1>Welcome to User Page</h1>
   <p>Here you can query supplier, factory, inventory, order and rate.</p>
-  <div class="options">
+  <!-- </div> -->
+  
     <div class="options">
       <!-- Place Order Section -->
       <div class="section">
-        <h2>Place Order</h2>
-        <button onclick="location.href='place_order.html'">Place Order</button>
+        <h2>Add</h2>
+        <button onclick="location.href='place_order.html'">Add Order</button>
       </div>
     
       <!-- Update Section -->
       <div class="section">
-        <h2>Update</h2>
-        <button onclick="location.href='update_order_status.html'">Update Order Status</button>
-        <button onclick="location.href='update_password.html'">Update Password</button>
+        <h2>Modify</h2>
+        <button onclick="location.href='update_order_status.html'">Modify Order Status</button>
+        <button onclick="location.href='update_password.html'">Modify Password</button>
       </div>
     
       <!-- Search Section -->
@@ -185,6 +216,8 @@
         <button onclick="location.href='search_factory.html'">Search Factory</button>
         <button onclick="location.href='search_supplier.html'">Search Supplier</button>
         <button onclick="location.href='search_order.html'">Search Order</button>
+        <button onclick="location.href='search_item.html'">Search Relation</button>
+        <button onclick="location.href='search_history.html'">Search History Order</button>
       </div>
     
       <!-- List Section -->
@@ -192,11 +225,10 @@
         <h2>List</h2>
         <button onclick="location.href='list_inventory.html'">List Inventory</button>
         <button onclick="location.href='list_order.html'">List Order</button>
-        <button onclick="location.href='list_rate.html'">List</button>
+        <button onclick="location.href='list_rate.html'">List Rate</button>
       </div>
     </div>
 
-  </div>
   </div>
 
   <script>

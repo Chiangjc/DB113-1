@@ -1,0 +1,56 @@
+.user-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #333;
+    overflow: hidden;
+    color: white;
+    padding: 14px 20px; 
+    display: flex; 
+    justify-content: flex-end; 
+    align-items: center; 
+  }
+  
+  .user-bar a {
+    color: white;
+    padding: 10px;
+    text-decoration: none;
+    display: inline-block;
+    white-space: nowrap; 
+    margin-left: auto; 
+  }
+  
+  #user_name {
+    font-size: 1.2em;
+    margin-right: 10px;  /* Add padding to the right to prevent text from touching the edge */
+  }
+  
+  /* Ensure the body content is not hidden behind the bar */
+  body {
+    margin-top: 50px;  /* Adjust this value based on the height of your user bar */
+  }
+  
+  .result-container {
+    margin-top: 20px;
+    width: 80%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px; /* 增加間距 */
+    justify-content: center; /* 中心對齊 */
+  }
+  .result {
+    flex: 1 1 calc(33.33% - 20px); /* 調整區塊寬度，確保每行三個 */
+    box-sizing: border-box;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  .result p {
+    margin: 5px 0;
+    word-wrap: break-word;
+    white-space: normal;
+  }
+  

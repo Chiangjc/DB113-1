@@ -9,15 +9,29 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
+      margin: 0;
+      padding-top: 150px; /* 增加頂部間距，避免內容被 header 遮擋 */
       background-color: #f4f4f4;
+    }
+    .user-bar {
+      position: fixed; /* 固定在頂部 */
+      top: 0;
+      width: 100%;
+      background-color: #333;
+      color: white;
+      padding: 10px 0;
+      text-align: center;
+      z-index: 1000; /* 確保 header 位於頂層 */
+    }
+    .user-bar a {
+      color: white;
+      margin-left: 20px;
+      text-decoration: none;
     }
     h1 {
       font-size: 2em;
+      text-align: center;
+      margin-top: 20px;
     }
     .form-container {
       margin-top: 20px;
@@ -25,7 +39,6 @@
       flex-direction: column;
       align-items: center;
     }
-    .form-container select,
     .form-container input,
     .form-container button {
       margin: 10px;
@@ -36,26 +49,53 @@
     }
     .form-container button {
       cursor: pointer;
-      background-color: #4CAF50;
+      background-color: #333;
       color: white;
       border: none;
       border-radius: 5px;
     }
     .form-container button:hover {
-      background-color: #45a049;
+      background-color: #575757;
     }
-    .date-container div {
+    .result-container {
+      margin-top: 20px;
+      width: 80%;
       display: flex;
-      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px; /* 增加間距 */
+      justify-content: center; /* 中心對齊 */
     }
     .result {
-      margin-top: 20px;
-      font-size: 1em;
-      color: #333;
+      flex: 1 1 calc(33.33% - 20px); /* 調整區塊寬度，確保每行三個 */
+      box-sizing: border-box;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      background-color: #fff;
+      box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    .result p {
+      margin: 5px 0;
+      word-wrap: break-word;
+      white-space: normal;
     }
     label {
       font-size: 1em;
       margin-top: 10px;
+    }
+    .form-container input,
+    .form-container select {
+      margin: 10px;
+      padding: 10px;
+      font-size: 1em;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    .form-container select {
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      background-color: white;
     }
   </style>
 </head>
@@ -92,7 +132,7 @@
         </select>
       </div>
       <div>
-        <label>Due Date:</label>
+        <label>Due Date:&nbsp;&nbsp;&nbsp;</label>
         <select id="due_year">
           <option value="None">None</option>
         </select>
@@ -156,7 +196,7 @@
   <script>
     document.addEventListener('DOMContentLoaded', () => { const userRole = sessionStorage.getItem('user_role'); 
     const mainPageLink = document.getElementById('main_page_link'); 
-    if (userRole === 'admin') { 
+    if (userRole === 'Admin') { 
       mainPageLink.href = 'admin.html'; 
     } 
     else { 
@@ -219,7 +259,15 @@
         console.log('Fetch response:', data);
         if (response.ok) {
           const list = data.order_list;
-          let listInfo = list.map(item => `Order ID: ${item.o_id}, Order Date: ${item.order_date}, Due Date: ${item.due_date}, Arrive Date: ${item.arrive_date}, Status: ${item.status}`).join('<br>');
+          let listInfo = list.map(item => `
+          <div class="result">
+            <p>Order ID: ${item.o_id}</p>
+            <p>Order Date: ${item.order_date}</p>
+            <p>Due Date: ${item.due_date}</p>
+            <p>Arrive Date: ${item.arrive_date}</p>
+            <p>Status: ${item.status}</p>
+          </div>`
+          ).join('');
           document.getElementById('order_list').innerHTML = listInfo;
         } else {
           document.getElementById('order_list').textContent = `Error: ${data.error}`;

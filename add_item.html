@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Item</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="user.js" defer></script>
+  <style>
+    /*body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background-color: #f4f4f4;
+    }
+    h1 {
+      font-size: 2em;
+    }
+    .form-container {
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .form-container input,
+    .form-container button {
+      margin: 10px;
+      padding: 10px;
+      font-size: 1em;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    .form-container button {
+      cursor: pointer;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+    }
+    .form-container button:hover {
+      background-color: #45a049;
+    }
+    .result {
+      margin-top: 20px;
+      font-size: 1em;
+      color: #333;
+    }*/
+    .form-container input,
+    .form-container select {
+      margin: 10px;
+      padding: 10px;
+      font-size: 1em;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      width: 250px;
+    }
+  </style>
+</head>
+<body>
+  <div class="user-bar">
+    <span id="user_name">Loading...</span>
+    <a href="admin.html">Main Page</a>
+  </div>
+  <h1>Add Item</h1>
+  <div class="form-container">
+    <input type="text" id="parent_inv" placeholder="Enter Parent Inventory" />
+    <input type="text" id="child_inv" placeholder="Enter Child Inventory" />
+    <input type="number" id="quantity" placeholder="Enter Quantity" />
+    <button onclick="addItem()">Add Item</button>
+    <p id="add_item_result">Enter details to add an item</p>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const userRole = sessionStorage.getItem('user_role');
+      const mainPageLink = document.getElementById('main_page_link');
+      if (userRole === 'Admin') {
+        mainPageLink.href = 'admin.html';
+      } else {
+        mainPageLink.href = 'user.html';
+      }
+      const userName = sessionStorage.getItem('username');
+      if (userName) {
+        document.getElementById('user_name').textContent = userName;
+      }
+    });
+
+    async function addItem() {
+      const parent_inv = document.getElementById('parent_inv').value;
+      const child_inv = document.getElementById('child_inv').value;
+      const quantity = document.getElementById('quantity').value;
+
+      if (!parent_inv || !child_inv || !quantity) {
+        document.getElementById('add_item_result').textContent = 'Please fill out all fields';
+        return;
+      }
+
+      const itemData = { parent_inv, child_inv, quantity };
+
+      try {
+        const response = await fetch('http://localhost:3000/addItem', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(itemData),
+        });
+
+        const data = await response.json();
+        console.log('Add item response:', data);
+        if (response.ok) {
+          document.getElementById('add_item_result').textContent = 'Item added successfully';
+        } else {
+          document.getElementById('add_item_result').textContent = `Error: ${data.error}`;
+        }
+      } catch (error) {
+        console.error('Error adding item:', error);
+        document.getElementById('add_item_result').textContent = 'Error adding item';
+      }
+    }
+  </script>
+</body>
+</html>
