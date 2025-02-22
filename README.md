@@ -21,4 +21,5 @@ Admin 角色由公司高層成員擔任，擁有更高的系統操作權限。�
 
 ## 實際成果
 [demo 影片](https://youtu.be/1AZcwfE1PLs)
-可參考期末報告(如附檔 DBMT G6.pdf)
+
+更多內容可參考期末報告（如附檔 DBMT G6.pdf）
