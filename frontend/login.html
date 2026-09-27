@@ -54,18 +54,10 @@
   </style>
 </head>
 <body>
-  <!-- <div class="login-form">
-    <h1>Login</h1>
-    <input type="text" id="username" placeholder="Username" required>
-    <input type="password" id="password" placeholder="Password" required>
-    <button onclick="login()">Login</button>
-    <p id="error" style="color: red;"></p>
-  </div> -->
-
   <div class="login-container">
     <div class="login-form">
       <h1>Login</h1>
-      <input type="text" id="username" placeholder="Username" required>
+      <input type="text" id="username" placeholder="Employee ID" required>
       <input type="password" id="password" placeholder="Password" required>
       <button onclick="login()">Login</button>
       <p id="error" style="color: red;"></p>
@@ -79,28 +71,21 @@
       const password = document.getElementById('password').value;
 
       try {
-        const response = await fetch(`http://localhost:3000/login/${username}`, { 
-          method: 'GET', 
-          credentials: 'include' // 攜帶 Cookie
-          });
+        // 帳號密碼送到後端驗證，前端不會拿到密碼
+        const response = await fetch('http://localhost:3000/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include', // 攜帶 Cookie
+          body: JSON.stringify({ e_id: username, password: password })
+        });
         const data = await response.json();
-        console.log('Login response:', data);  // 添加日誌
 
         if (response.ok && data.role) {
-          if(data.password == password){
-            sessionStorage.setItem('user_id', data.e_id);
-            sessionStorage.setItem('user_role', data.role);
-            if (data.role === 'Admin') {
-                location.href = `admin.html`;
-              } else {
-                location.href = `user.html`;
-            }
-          }else{
-            document.getElementById('error').textContent = data.error || 'Incorrect password';
-          }
-          
+          sessionStorage.setItem('user_id', data.e_id);
+          sessionStorage.setItem('user_role', data.role);
+          location.href = data.role === 'Admin' ? 'admin.html' : 'user.html';
         } else {
-          document.getElementById('error').textContent = data.error || 'Invalid username or password';
+          document.getElementById('error').textContent = data.error || 'Invalid employee ID or password';
         }
       } catch (error) {
         console.error('Error during login:', error);

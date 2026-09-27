@@ -1,84 +1,28 @@
-import sys
-import numpy as np
-import pandas as pd
-#import duckdb
-import psycopg2
-#import matplotlib.pyplot as plt
-from collections import Counter
-from tabulate import tabulate
-from threading import Lock
 import random
 import string
 
-# ============================= Connection to database =============================
+# 可被修改的欄位白名單：欄位名稱無法用參數化查詢，只能先比對白名單以防 SQL injection
+MODIFIABLE_COLUMNS = {
+    "part": {"p_name", "standard", "length", "width", "height"},
+    "supplier": {"s_name", "s_country", "s_address", "s_phone", "super_name"},
+    "rate": {"on_time", "quality", "after_sales_service", "final_score", "e_id"},
+    "employee": {"e_name", "start_date", "leave_date", "password", "mgr_id", "role"},
+}
 
-DB_NAME = "Final"
-DB_USER = "postgres"
-DB_HOST = "localhost"
-DB_PORT = 5433
 
-cur = None
-db = None
-create_event_lock = Lock()
+def _check_column(table, item):
+    if item not in MODIFIABLE_COLUMNS[table]:
+        raise ValueError(f"Invalid column name for {table}: {item}")
 
-#connect to database
-def db_connect():
-    exit_code = 0
-    try:
-        global db
-        db = psycopg2.connect(database=DB_NAME, user=DB_USER, password='REMOVED', 
-                              host=DB_HOST, port=DB_PORT)
-        print("Successfully connect to DBMS.")
-        global cur
-        cur = db.cursor()
-        return db
-        
-    except psycopg2.Error as err:
-        print("DB error: ", err)
-        exit_code = 1
-    except Exception as err:
-        print("Internal Error: ", err)
-        raise err
-    
-    sys.exit(exit_code)
-    
-#print the result
-def print_table(cur):
-    rows = cur.fetchall()
-    columns = [desc[0] for desc in cur.description]
 
-    return tabulate(rows, headers=columns, tablefmt="github")
+def _strip_password(record):
+    """查詢員工資料時不回傳密碼欄位。"""
+    if isinstance(record, dict):
+        record.pop("password", None)
+    return record
 
-# ============================= System function =============================
-
-#find the user and ensure its authority (input employee_id)
-def fetch_user(employee_id): 
-    cmd = """
-        SELECT * 
-        FROM employee e
-        WHERE e.User_id = %s;
-    """
-    cur.execute(cmd, [employee_id])
-    rows = cur.fetchall()
-    
-    if not rows:
-        return None, None, None, None, None, None
-
-    return rows
-
-#check whether that user exists    
-def userid_exist(userid):
-    cmd =   """
-            select count(*) 
-            from "USER"
-            where User_id = %s;
-            """
-    cur.execute(cmd, [userid])
-    count = cur.fetchone()[0]
-    return count > 0
 
 # ============================= function for User =============================
-# V
 def place_order(cursor, order_date, due_date, quantity, status, e_id, inv_id):
     query = """
     INSERT INTO "Order" (order_date, due_date, quantity, status, e_id, inv_id)
@@ -91,7 +35,6 @@ def place_order(cursor, order_date, due_date, quantity, status, e_id, inv_id):
     return o_id
 
 
-# V
 def update_order_status(cursor, o_id, item, new_value):
     valid_columns = {"status", "feedback", "arrive_date"}
     if item not in valid_columns:
@@ -113,7 +56,6 @@ def update_order_status(cursor, o_id, item, new_value):
     cursor.connection.commit()  # Commit the transaction
     return cursor.rowcount  # Return the number of rows affected
 
-# V
 def search_inventory_info(cursor, inv_id):
     try:
         query = """
@@ -136,7 +78,6 @@ def search_inventory_info(cursor, inv_id):
 
 
 
-# V
 def search_inventory_rate(cursor, inv_id):
     query = """
     SELECT r.score, r.year, r.e_id
@@ -151,7 +92,6 @@ def search_inventory_rate(cursor, inv_id):
         return [dict(zip(column_names, row)) for row in rows]
     return None
 
-# V
 def search_factory(cursor, f_name):
     query = """
     SELECT *
@@ -165,7 +105,6 @@ def search_factory(cursor, f_name):
         return dict(zip(column_names, row))
     return None
 
-#V
 def search_supplier(cursor, s_name):
     query = """
     SELECT *
@@ -193,7 +132,6 @@ def find_history(cursor, inv_id):
     else:
         return None
 
-#V
 def list_inventory(cursor, inv_name):
     query = """
     SELECT *
@@ -207,38 +145,27 @@ def list_inventory(cursor, inv_name):
         return [dict(zip(column_names, row)) for row in rows]
     return None
 
-# V
 def list_order(cursor, order_date, due_date, arrive_date, status):
-    query = """
-    SELECT *
-    FROM "Order"
-    WHERE
-    """
-    count = 0
+    conditions = []
+    params = []
     if order_date != "None":
-        count += 1
-        query += f" order_date = '{order_date}'"
+        conditions.append("order_date = %s")
+        params.append(order_date)
     if due_date != "None":
-        if count > 0:
-            query += ' AND '
-        count += 1
-        query += f" due_date = '{due_date}'"
+        conditions.append("due_date = %s")
+        params.append(due_date)
     if arrive_date != "None":
-        if count > 0:
-            query += ' AND '
-        count += 1
-        query += f" arrive_date = '{arrive_date}'"
+        conditions.append("arrive_date = %s")
+        params.append(arrive_date)
     if status != "None":
-        if count > 0:
-            query += ' AND '
-        count += 1
-        query += f" status LIKE '%{status}%'"
-    query += ';'
-    
-    if count == 0:  # All arguments are "None" (No keyword for search)
+        conditions.append("status LIKE %s")
+        params.append(f"%{status}%")
+
+    if not conditions:  # All arguments are "None" (No keyword for search)
         return " order_date, due_date, arrive_date, and status cannot be all empty."
 
-    cursor.execute(query)
+    query = 'SELECT * FROM "Order" WHERE ' + " AND ".join(conditions) + ";"
+    cursor.execute(query, tuple(params))
     rows = cursor.fetchall()  # Fetch all matching rows
     if rows:
         column_names = [desc[0] for desc in cursor.description]
@@ -246,7 +173,6 @@ def list_order(cursor, order_date, due_date, arrive_date, status):
     return None
 
 
-# V    
 def search_order(cursor, o_id):
     query = """
     SELECT *
@@ -266,15 +192,13 @@ def update_password(cursor, e_id, new_value):
     SET password = %s
     WHERE e_id = %s;
     """
-    cursor.execute(query, (new_value, e_id))  # Use parameterized query to avoid SQL injection
+    cursor.execute(query, (new_value, e_id))
     cursor.connection.commit()  # Commit the transaction
     return cursor.rowcount  # Return the number of rows affected
 
 
-
 # ============================= function for Admin =============================
 
-# X
 def generate_employee_id():
     letters = ''.join(random.choices(string.ascii_uppercase, k=2))  # Generate two random uppercase letters
     number = random.randint(1, 9999999999)  # Generate a random number between 1 and 9999999999
@@ -291,7 +215,6 @@ def db_register_employee(cursor, e_name, start_date, password, mgr_id, role):
     cursor.connection.commit()  # Commit the transaction
     return e_id
 
-# V  
 def add_inventory(cursor, inv_name, status, p_id):
     query = """
     INSERT INTO inventory (inv_name, status, p_id)
@@ -304,8 +227,8 @@ def add_inventory(cursor, inv_name, status, p_id):
     return inv_id
 
 
-# V
 def modify_part(cursor, p_id, item, new_value):
+    _check_column("part", item)
     query = f"""
     UPDATE part
     SET {item} = %s
@@ -315,7 +238,6 @@ def modify_part(cursor, p_id, item, new_value):
     cursor.connection.commit()  # Commit the transaction
     return cursor.rowcount  # Return the number of rows affected
 
-# V 
 def add_supplier(cursor, s_name, s_country, s_address, s_phone, super_name):
     query = """
     INSERT INTO supplier (s_name, s_country, s_address, s_phone, super_name)
@@ -328,8 +250,8 @@ def add_supplier(cursor, s_name, s_country, s_address, s_phone, super_name):
     return s_id
 
 
-# V
 def modify_supplier(cursor, s_id, item, new_value):
+    _check_column("supplier", item)
     query = f"""
     UPDATE supplier
     SET {item} = %s
@@ -339,7 +261,6 @@ def modify_supplier(cursor, s_id, item, new_value):
     cursor.connection.commit()  # Commit the transaction
     return cursor.rowcount  # Return the number of rows affected
 
-# V
 def add_rate(cursor, s_id, year, on_time, quality, after, final_score, e_id):
     query = """
     INSERT INTO rate (s_id, year, on_time, quality, after_sales_service, final_score, e_id)
@@ -348,8 +269,8 @@ def add_rate(cursor, s_id, year, on_time, quality, after, final_score, e_id):
     cursor.execute(query, (s_id, year, on_time, quality, after, final_score, e_id))
     cursor.connection.commit()
 
-# V
 def modify_rate(cursor, year, s_id, item, new_value):
+    _check_column("rate", item)
     query = f"""
     UPDATE rate
     SET {item} = %s
@@ -359,8 +280,8 @@ def modify_rate(cursor, year, s_id, item, new_value):
     cursor.connection.commit()  # Commit the transaction
     return cursor.rowcount  # Return the number of rows affected
 
-# V
 def modify_employee(cursor, e_id, item, new_value):
+    _check_column("employee", item)
     query = f"""
     UPDATE employee
     SET {item} = %s
@@ -370,7 +291,6 @@ def modify_employee(cursor, e_id, item, new_value):
     cursor.connection.commit()  # Commit the transaction
     return cursor.rowcount  # Return the number of rows affected
 
-# V
 def list_employee(cursor, start_date, mgr_id):
     query = """
     SELECT *
@@ -396,11 +316,10 @@ def list_employee(cursor, start_date, mgr_id):
     rows = cursor.fetchall()
     if rows:
         column_names = [desc[0] for desc in cursor.description]
-        return [dict(zip(column_names, row)) for row in rows]
+        return [_strip_password(dict(zip(column_names, row))) for row in rows]
     return None
 
 
-# V
 def search_employee(cursor, e_id):
     query = """
     SELECT *
@@ -411,11 +330,10 @@ def search_employee(cursor, e_id):
     result = cursor.fetchone()
     if result:
         column_names = [desc[0] for desc in cursor.description]
-        return dict(zip(column_names, result))  # Return as a dictionary
+        return _strip_password(dict(zip(column_names, result)))
     else:
         return f"No employee found with e_id: {e_id}"
 
-# V
 def list_rate(cursor, s_id):
     query = """
     SELECT final_score, year, e_id

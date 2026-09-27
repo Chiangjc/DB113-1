@@ -4,7 +4,8 @@ function getCookie(name) {
     for (let i = 0; i < cookieArr.length; i++) {
         let cookie = cookieArr[i].trim();
         if (cookie.startsWith(name + '=')) {
-            return cookie.substring(name.length + 1);
+            // Flask 會替含空白的值加上引號，這裡去掉引號並還原編碼
+            return decodeURIComponent(cookie.substring(name.length + 1).replace(/^"|"$/g, ''));
         }
     }
     return null;  // 如果cookie找不到，返回null

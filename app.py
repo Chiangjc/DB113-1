@@ -1,8 +1,13 @@
-from flask import Flask, request, jsonify, make_response, redirect, url_for, session
+import hmac
+import os
+
+from flask import Flask, request, jsonify, make_response, session
 from flask_cors import CORS
 import psycopg2
 from psycopg2 import pool
 from datetime import datetime
+from dotenv import load_dotenv
+
 from DB_utils import search_inventory_info, search_factory, search_inventory_rate, search_supplier
 from DB_utils import list_inventory, list_order, search_order, update_order_status, update_password
 from DB_utils import db_register_employee
@@ -12,52 +17,72 @@ from DB_utils import add_rate, place_order, add_supplier, add_inventory
 from DB_utils import search_item, find_history
 from DB_utils import add_item
 
+# 從 .env 讀取設定（請參考 .env.example）
+load_dotenv()
+
 app = Flask(__name__)
-CORS(app, supports_credentials=True) # Enable CORS with credentials
-app.secret_key = 'REMOVED'  # Used for session encryption
+CORS(app, supports_credentials=True)  # Enable CORS with credentials
+app.secret_key = os.environ["FLASK_SECRET_KEY"]  # Used for session encryption
+
+def verify_password(stored, given):
+    """在後端比對密碼（範例資料為假資料，密碼以明碼儲存）。"""
+    if stored is None:
+        return False
+    return hmac.compare_digest(stored.encode(), given.encode())
+
 
 # Create connection pool
 try:
-    connection_pool = psycopg2.pool.SimpleConnectionPool(1, 20,
-                                                         user="postgres",
-                                                         password="REMOVED",
-                                                         host="127.0.0.1",
-                                                         port="5433",
-                                                         database="Final")
+    connection_pool = psycopg2.pool.SimpleConnectionPool(
+        1, 20,
+        user=os.environ.get("DB_USER", "postgres"),
+        password=os.environ["DB_PASSWORD"],
+        host=os.environ.get("DB_HOST", "127.0.0.1"),
+        port=os.environ.get("DB_PORT", "5432"),
+        database=os.environ.get("DB_NAME", "Final"),
+    )
     if connection_pool:
         print("Connection pool created successfully")
 except (Exception, psycopg2.DatabaseError) as error:
     print("Error while connecting to PostgreSQL", error)
 
-@app.route('/login/<e_id>', methods=['GET'])
-def login(e_id):
+
+@app.route('/login', methods=['POST'])
+def login():
+    """在後端驗證密碼，不會把密碼回傳給前端。"""
+    data = request.get_json(silent=True) or {}
+    e_id = data.get('e_id')
+    password = data.get('password')
+    if not e_id or not password:
+        return jsonify({'error': 'Employee ID and password are required'}), 400
+
+    conn = None
     try:
         conn = connection_pool.getconn()
-        if conn:
-            cursor = conn.cursor()
-            cursor.execute("SELECT * FROM employee WHERE e_id = %s", (e_id,))
-            row = cursor.fetchone()
-            if row:
-                result = {
-                    'e_id': row[0],
-                    'e_name': row[1],
-                    'password': row[4],
-                    'role': row[6]
-                }
-                response = make_response(jsonify(result))
-                response.set_cookie('username', row[1], path='/')
-                session['user_id'] = row[0]
-                session['role'] = row[6]
-                print(f"Set cookie: username={row[1]}")
-                return response, 200
-            else:
-                result = {'error': 'Employee not found'}
-            cursor.close()
-            connection_pool.putconn(conn)
-            return jsonify(result), 404
+        cursor = conn.cursor()
+        cursor.execute(
+            "SELECT e_id, e_name, password, role FROM employee WHERE e_id = %s",
+            (e_id,),
+        )
+        row = cursor.fetchone()
+        cursor.close()
+
+        # 帳號不存在或密碼錯誤都回傳同樣訊息，避免被用來試探帳號是否存在
+        if not row or not verify_password(row[2], password):
+            return jsonify({'error': 'Invalid employee ID or password'}), 401
+
+        e_id, e_name, _, role = row
+        session['user_id'] = e_id
+        session['role'] = role
+        response = make_response(jsonify({'e_id': e_id, 'e_name': e_name, 'role': role}))
+        response.set_cookie('username', e_name, path='/')
+        return response, 200
     except (Exception, psycopg2.DatabaseError) as error:
         print(f"Error while fetching data from PostgreSQL: {error}")
         return jsonify({'error': 'Database query error'}), 500
+    finally:
+        if conn:
+            connection_pool.putconn(conn)
 
 
 @app.route('/updatePassword', methods=['POST'])
@@ -701,4 +726,8 @@ def add_item_route():
         return jsonify({'error': 'Database query error'}), 500
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=3000)
+    app.run(
+        debug=os.environ.get("FLASK_DEBUG") == "1",
+        host=os.environ.get("FLASK_HOST", "127.0.0.1"),
+        port=int(os.environ.get("FLASK_PORT", "3000")),
+    )
